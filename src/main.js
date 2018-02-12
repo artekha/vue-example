@@ -1,16 +1,21 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
-import VueRouter from 'vue-router'
+import VueRouter from 'vue-router';
+import VueResoure from 'vue-resource';
 import VueLocalStorage from 'vue-localstorage';
-import Main from './Main.vue';
+import VueMaterial from 'vue-material';
+import 'vue-material/dist/vue-material.css';
+
+import { store } from './store/store'
+
 import App from './App';
-import Login from 'WBCoreLogin';
-const VueMaterial = require('vue-material');
-require('vue-material/dist/vue-material.css');
+import Login from './components/Login';
+import Portal from './components/Portal';
+import Microservices from './components/Microservices';
+import Admin from './components/Admin';
 
 Vue.use(VueMaterial);
 Vue.use(VueRouter);
+Vue.use(VueResoure);
 Vue.use(VueLocalStorage);
 
 Vue.material.registerTheme({
@@ -19,21 +24,22 @@ Vue.material.registerTheme({
     accent: 'black',
   }
 });
+
 Vue.material.setCurrentTheme('default');
 
 const routes = [
+  { path: '/portal', name:'portal', component: Portal},
+  { path: '/microservices', name:'microservices', component: Microservices},
+  { path: '/admin', name:'admin', component: Admin},
   { path: '/login', name:'login', component: Login},
-  { path: '/main', name:'main', component: Main},
-  { path: '*', redirect: '/main'}
-]
+];
 
-const router = new VueRouter({
-  routes // short for routes: routes
-});
+const router = new VueRouter({ routes });
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('WBToken');
-  if ((!token || token === '') && to.path !== '/login') {
+  next();
+  const token = store.state.WBToken || localStorage.getItem('WBToken');
+  if (((!token || token === '')) && to.path !== '/login') {
     next('/login');
   } else {
     next();
@@ -43,7 +49,7 @@ router.beforeEach((to, from, next) => {
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store,
   router,
   render: h => h(App)
 });
-
