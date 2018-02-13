@@ -8,6 +8,7 @@
       ></md-progress>
     </div>
     <wb-nav
+      :vuexUsing="true"
       :navbarItems="navbarItems"
       :profileMenuItems="profileMenuItems"
       :title="'WB Portal'"
@@ -31,6 +32,7 @@ export default {
   computed: {
     ...mapGetters([
       'message',
+      'messageRandom',
       'pending',
       'route',
       'isLoggedIn',
@@ -42,8 +44,10 @@ export default {
     }
   },
   watch: {
-    message() {
-      this.$refs.snackbar.open();
+    messageRandom(newValue, oldValue) {
+      if (newValue) {
+        this.$refs.snackbar.open();
+      }
     },
     isLoggedIn(newValue, oldValue) {
       if (!newValue) {

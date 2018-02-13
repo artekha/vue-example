@@ -4646,7 +4646,7 @@ watchpack@^0.2.1:
 
 "wb-nav@git+https://widgetbrainsupport:FlawlessServ1c3ImpeccableSupp0rt@bitbucket.org/widgetbrain/wb-navbar.git":
   version "0.0.7"
-  resolved "git+https://widgetbrainsupport:FlawlessServ1c3ImpeccableSupp0rt@bitbucket.org/widgetbrain/wb-navbar.git#59a1afd0e257daa96c08d309890bfe78d057d8bf"
+  resolved "git+https://widgetbrainsupport:FlawlessServ1c3ImpeccableSupp0rt@bitbucket.org/widgetbrain/wb-navbar.git#604aeb98aeee987d23976b29284dd5e79b8ca828"
 
 "wb-vue-map@git+https://widgetbrainsupport:FlawlessServ1c3ImpeccableSupp0rt@bitbucket.org/widgetbrain/wb-map.git":
   version "1.0.2"

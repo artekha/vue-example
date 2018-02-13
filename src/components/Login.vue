@@ -50,8 +50,6 @@ export default {
       this.$store.dispatch('login', {
         user: this.user,
         remember: this.remember
-      }).then(() => {
-        this.$router.push('portal')
       });
     },
   },

@@ -10,11 +10,14 @@ const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_ERROR = 'LOGIN_ERROR';
 const LOGOUT = 'LOGOUT';
 const CHANGE_ROUTE = 'CHANGE_ROUTE';
+const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
+const SET_ACTIVE_LINK = 'SET_ACTIVE_LINK';
 
-//const strict = process.env.NODE_ENV !== 'production';
-const strict = false;
+const strict = process.env.NODE_ENV !== 'production';
+
 const getters = {
   message: state => state.message,
+  messageRandom: state => state.messageRandom,
   pending: state => state.pending,
   route: state => state.route,
   isLoggedIn: state => state.isLoggedIn,
@@ -25,6 +28,8 @@ const getters = {
 const actions = {
   login({ commit }, creds) {
     commit(LOGIN);
+    const neededRoute = this.state.navbarItems
+      .find(item => item.url === 'portal');
     return new Promise(resolve => {
       managedata.login(creds.user)
         .then(res => {
@@ -33,12 +38,18 @@ const actions = {
             response: res.body,
             remember: creds.remember
           });
+          if (neededRoute) {
+            commit({
+              type: CHANGE_ROUTE,
+              item: neededRoute
+            })
+          }
           resolve();
         })
         .catch(err => {
           commit({
             type: LOGIN_ERROR,
-            response: err.body
+            response: err
           });
         });
     });
@@ -46,10 +57,10 @@ const actions = {
   logout({ commit }) {
     commit(LOGOUT);
   },
-  changeRoute({ commit }, url) {
+  changeRoute({ commit }, item) {
     commit({
       type: CHANGE_ROUTE,
-      url
+      item
     });
   }
 };
@@ -59,12 +70,17 @@ const mutations = {
     state.pending = true;
   },
   [LOGOUT](state) {
+    this.commit(CLEAR_MESSAGE);
     localStorage.removeItem('WBToken');
     localStorage.removeItem('userId');
+    state.WBToken = null;
+    state.userId = null;
     state.isLoggedIn = false;
+    state.route = 'login';
     state.message = 'You logged out';
   },
   [LOGIN_SUCCESS](state, payload) {
+    this.commit(CLEAR_MESSAGE);
     state.isLoggedIn = true;
     state.pending = false;
     state.WBToken = payload.response.id;
@@ -76,11 +92,40 @@ const mutations = {
     state.message = 'Login succesful. Welcome back!';
   },
   [LOGIN_ERROR](state, payload) {
+    this.commit(CLEAR_MESSAGE);
     state.pending = false;
-    state.message = payload.response.error.message;
+    state.message = payload.response.body.error.message;
   },
   [CHANGE_ROUTE](state, payload) {
-    state.route = payload.url;
+    state.route = payload.item.url;
+    const currentItem = state.navbarItems.find(item => {
+      return item.id === payload.item.id;
+    });
+
+    // this.commit({
+    //   type: SET_ACTIVE_LINK,
+    //   currentItem
+    // });
+  },
+  [CLEAR_MESSAGE](state) {
+    state.messageRandom = Math.random();
+    state.message = null
+  },
+  [SET_ACTIVE_LINK](state, payload) {
+    const currentItem = payload.currentItem;
+    if (currentItem) {
+      state.navbarItems.forEach(item => {
+        if (currentItem.id === item.id) {
+          item.active = true;
+        } else {
+          item.active = false;
+        }
+      });
+    } else {
+      state.navbarItems.forEach(item => {
+        item.active = false;
+      })
+    }
   }
 };
 
@@ -90,6 +135,7 @@ const state = {
   WBToken: null,
   userId: null,
   message: null,
+  messageRandom: null,
   route: null,
   navbarItems: [
     {
@@ -98,7 +144,7 @@ const state = {
       active: false,
       url: 'portal',
       onClick() {
-        store.dispatch('changeRoute', this.url)
+        store.dispatch('changeRoute', this)
       }
     },
     {
@@ -107,7 +153,7 @@ const state = {
       active: false,
       url: 'microservices',
       onClick() {
-        store.dispatch('changeRoute', this.url)
+        store.dispatch('changeRoute', this)
       }
     },
     {
@@ -116,7 +162,7 @@ const state = {
       active: false,
       url: 'apis',
       onClick() {
-        store.dispatch('changeRoute', this.url)
+        store.dispatch('changeRoute', this)
       }
     },
   ],
@@ -126,7 +172,7 @@ const state = {
       name: 'Admin',
       url: 'admin',
       onClick() {
-        store.dispatch('changeRoute', this.url)
+        store.dispatch('changeRoute', this)
       }
     },
     {

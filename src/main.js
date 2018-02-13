@@ -39,11 +39,21 @@ const router = new VueRouter({ routes });
 router.beforeEach((to, from, next) => {
   next();
   const token = store.state.WBToken || localStorage.getItem('WBToken');
-  if (((!token || token === '')) && to.path !== '/login') {
+  if ((!token || token === '') && to.path !== '/login') {
     next('/login');
+  } else if ((token && token !== '') && to.path === '/login') {
+    next('/portal');
   } else {
     next();
   }
+  const routeName = to.path.replace('/', '');
+  const currentItem = store.state.navbarItems
+    .find(item => item.url === routeName);
+
+  store.commit({
+    type: 'SET_ACTIVE_LINK',
+    currentItem
+  });
 });
 
 /* eslint-disable no-new */
