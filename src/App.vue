@@ -32,10 +32,14 @@ export default {
     ...mapGetters([
       'message',
       'pending',
+      'route',
       'isLoggedIn',
       'navbarItems',
       'profileMenuItems'
-    ])
+    ]),
+    navbarItemsLocal() {
+      return this.navbarItems;
+    }
   },
   watch: {
     message() {
@@ -45,14 +49,10 @@ export default {
       if (!newValue) {
         this.$router.push('login');
       }
+    },
+    route(newValue, oldValue) {
+      this.$router.push(newValue);
     }
-  },
-  methods: {
-    changeLocation(item) {
-      this.$router.push(item.url);
-    }
-  },
-  mounted() {
   }
 };
 </script>

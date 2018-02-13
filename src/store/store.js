@@ -9,18 +9,14 @@ const LOGIN = 'LOGIN';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_ERROR = 'LOGIN_ERROR';
 const LOGOUT = 'LOGOUT';
-const REDIRECT_TO_HOME = 'REDIRECT_TO_HOME';
-const SHOW_SNACKBAR = 'SHOW_SNACKBAR';
+const CHANGE_ROUTE = 'CHANGE_ROUTE';
 
-const strict = process.env.NODE_ENV !== 'production';
-
-const logout = () => {
-  store.dispatch('logout');
-}
-
+//const strict = process.env.NODE_ENV !== 'production';
+const strict = false;
 const getters = {
   message: state => state.message,
   pending: state => state.pending,
+  route: state => state.route,
   isLoggedIn: state => state.isLoggedIn,
   navbarItems: state => state.navbarItems,
   profileMenuItems: state => state.profileMenuItems
@@ -37,11 +33,6 @@ const actions = {
             response: res.body,
             remember: creds.remember
           });
-        })
-        .then(() => {
-          commit({
-            type: SHOW_SNACKBAR
-          });
           resolve();
         })
         .catch(err => {
@@ -49,18 +40,17 @@ const actions = {
             type: LOGIN_ERROR,
             response: err.body
           });
-          commit({
-            type: SHOW_SNACKBAR
-          });
         });
     });
   },
   logout({ commit }) {
     commit(LOGOUT);
-    // commit({
-    //   type: SHOW_SNACKBAR,
-    //   refs: creds.vueInstance.$refs
-    // });
+  },
+  changeRoute({ commit }, url) {
+    commit({
+      type: CHANGE_ROUTE,
+      url
+    });
   }
 };
 
@@ -85,11 +75,12 @@ const mutations = {
     }
     state.message = 'Login succesful. Welcome back!';
   },
-  [LOGIN_ERROR](state, err) {
+  [LOGIN_ERROR](state, payload) {
     state.pending = false;
-    state.message = err.response.error.message;
+    state.message = payload.response.error.message;
   },
-  [SHOW_SNACKBAR](state) {
+  [CHANGE_ROUTE](state, payload) {
+    state.route = payload.url;
   }
 };
 
@@ -99,24 +90,34 @@ const state = {
   WBToken: null,
   userId: null,
   message: null,
+  route: null,
   navbarItems: [
     {
       id: 0,
       name: 'Applications',
       active: false,
       url: 'portal',
+      onClick() {
+        store.dispatch('changeRoute', this.url)
+      }
     },
     {
       id: 1,
       name: 'Microservices',
       active: false,
       url: 'microservices',
+      onClick() {
+        store.dispatch('changeRoute', this.url)
+      }
     },
     {
       id: 2,
       name: 'APIs',
       active: false,
       url: 'apis',
+      onClick() {
+        store.dispatch('changeRoute', this.url)
+      }
     },
   ],
   profileMenuItems: [
@@ -124,12 +125,17 @@ const state = {
       icon: 'admin',
       name: 'Admin',
       url: 'admin',
+      onClick() {
+        store.dispatch('changeRoute', this.url)
+      }
     },
     {
       icon: 'logout',
       name: 'Log out',
       url: 'logout',
-      onClick: logout
+      onClick() {
+        store.dispatch('logout')
+      }
     },
   ]
 };
