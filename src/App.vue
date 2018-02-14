@@ -2,7 +2,7 @@
   <div id="app">
     <div class="preloader">
       <md-progress
-        v-show="pending"
+        v-if="pending"
         class="md-warn"
         md-indeterminate
       ></md-progress>
@@ -70,6 +70,7 @@ export default {
 
 body {
   font-size: 16px;
+  font-family: 'WidgetBrain';
 }
 #app nav.navbar {
   border-bottom: 1px solid #ccc !important;
@@ -93,7 +94,13 @@ body {
   font-weight: 600;
   font-size: 1.5rem;
   text-align: center;
-  padding: 20px;
   margin: 0 auto;
+}
+
+.main-headline__text {
+  padding: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+  border-bottom: 2px solid #ff9800;
 }
 </style>

@@ -1,16 +1,11 @@
 <template>
-  <div class="microservices">
+  <div class="apis">
     <h1 class="main-headline">
-      <div class="main-headline__text">Microservices</div>
+      <div class="main-headline__text">Apis</div>
     </h1>
-    <div class="microservices-grid">
-      <div
-        v-if="microservices" v-for="microservice in microservices"
-        @click="forward(microservice)"
-        class="microservice"
-      >
-        <div class="microservice__name">{{microservice.name}}</div>
-        <div class="microservice__host">Host: {{microservice.host}}</div>
+    <div class="apis-grid">
+      <div @click="forward(api)" v-if="apis" v-for="api in apis" class="api">
+        <div class="api__name">{{api.name}}</div>
       </div>
     </div>
   </div>
@@ -21,35 +16,35 @@ import managedata from '../helpers/managedata';
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'Microservices',
+  name: 'apis',
   computed: {
     ...mapGetters([
-      'microservices'
+      'apis'
     ])
   },
   methods: {
-    forward(ms) {
-      const url = ms.url;
+    forward(api) {
+      const url = api.url;
       const token = this.WBToken || localStorage.getItem('WBToken');
       const userId = this.userId || localStorage.getItem('userId');
       window.location.href = url+"?wbtoken="+token+'&user='+userId;
     }
   },
   mounted() {
-    this.$store.dispatch('getMicroservices');
+    this.$store.dispatch('getApis');
   }
 }
 </script>
 
 <style scoped>
-.microservices-grid {
+.apis-grid {
   padding: 20px;
   display: grid;
   grid-template-columns: repeat(auto-fit, 200px);
   grid-gap: 20px;
 }
-.microservice {
-  height: 100px;
+.api {
+  height: 80px;
   box-shadow: 0 1px 2px rgba(0,0,0,.2);
   border: 2px solid transparent;
   cursor: pointer;
@@ -61,12 +56,11 @@ export default {
   font-size: .9rem;
 }
 
-.microservice__name {
-  margin-bottom: 15px;
+.api__name {
   font-weight: 600;
 }
 
-.microservice:hover {
+.api:hover {
   border-color: #ff9800;
   box-shadow: none;
 }

@@ -1,9 +1,14 @@
 import Vue from 'vue';
 
+import { store } from '../store/store';
+
 export default {
-  get(url, params, cb, errcb){
+  token() {
+    return store.state.WBToken || localStorage.getItem('WBToken');
+  },
+  get(url, params){
     let urlString = url;
-    const token = localStorage.getItem('WBToken');
+    const token = this.token();
     params.push({key:'access_token', value:token});
 
     for (let i = 0; i < params.length; i++) {
@@ -25,9 +30,9 @@ export default {
       );
     })
   },
-  post(url, data, cb, errcb){
+  post(url, data){
     let urlString = url;
-    const token = localStorage.getItem('WBToken');
+    const token = this.token();
     urlString += '?access_token=' + token;
     return new Promise((resolve, reject) => {
       console.log(urlString);
@@ -43,7 +48,7 @@ export default {
   },
   put(url, data, cb, errcb){
     let urlString = url;
-    const token = localStorage.getItem('WBToken');
+    const token = this.token();
     urlString += '?access_token=' + token;
 
     Vue.http.put(urlString, data).then(

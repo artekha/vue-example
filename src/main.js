@@ -5,12 +5,13 @@ import VueLocalStorage from 'vue-localstorage';
 import VueMaterial from 'vue-material';
 import 'vue-material/dist/vue-material.css';
 
-import { store } from './store/store'
+import { store } from './store/store';
 
 import App from './App';
 import Login from './components/Login';
 import Portal from './components/Portal';
 import Microservices from './components/Microservices';
+import Apis from './components/Apis';
 import Admin from './components/Admin';
 
 Vue.use(VueMaterial);
@@ -30,6 +31,7 @@ Vue.material.setCurrentTheme('default');
 const routes = [
   { path: '/portal', name:'portal', component: Portal},
   { path: '/microservices', name:'microservices', component: Microservices},
+  { path: '/apis', name:'apis', component: Apis},
   { path: '/admin', name:'admin', component: Admin},
   { path: '/login', name:'login', component: Login},
 ];
