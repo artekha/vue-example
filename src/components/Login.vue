@@ -3,7 +3,7 @@
     <div class="auth-area">
       <div class="auth-window">
         <div class="auth-logo">
-          <img src="../images/logo.png" alt="Widget Brain logo">
+          <img src="../../static/logo.png" alt="Widget Brain logo">
         </div>
         <form @submit.prevent="login" class="auth-form">
           <md-input-container>
