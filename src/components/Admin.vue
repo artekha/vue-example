@@ -15,7 +15,7 @@
           <admin-users></admin-users>
         </div>
         <div v-if="currentTab === 2" class="admin-tab">
-          <admin-apps
+          <admin-apps></admin-apps>
         </div>
         <div v-if="currentTab === 3" class="admin-tab">3</div>
         <div v-if="currentTab === 4" class="admin-tab">4</div>
@@ -24,45 +24,24 @@
         <div v-if="currentTab === 7" class="admin-tab">7</div>
       </div>
     </div>
-    <!-- <md-tabs class="md-transparent" md-centered>
-      <md-tab md-label="Users">
-        
-      </md-tab>
-
-      <md-tab md-label="Apps">
-      </md-tab>
-
-      <md-tab md-label="Roles">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolorum quas.</p>
-      </md-tab>
-
-      <md-tab md-label="Organizations">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolorum quas.</p>
-      </md-tab>
-
-      <md-tab md-label="Organisation Assignments">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolorum quas.</p>
-      </md-tab>
-
-      <md-tab md-label="Api Users">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolorum quas.</p>
-      </md-tab>
-
-      <md-tab md-label="Api User Assignments">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolorum quas.</p>
-      </md-tab>
-
-    </md-tabs> -->
   </div>
 </template>
 
 <script>
 import AdminUsers from './AdminTabs/AdminUsers';
+import AdminApps from './AdminTabs/AdminApps';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Admin',
   components: {
-    AdminUsers
+    AdminUsers,
+    AdminApps
+  },
+  computed: {
+    ...mapGetters([
+      'pending'
+    ])
   },
   data() {
     return {

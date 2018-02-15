@@ -1,12 +1,12 @@
 <template>
   <div class="admin-tab">
     <wb-datatable
-      v-bind="usersProps"
+      v-bind="tableProps"
+      @addEmit="openCreateDialog"
       @editEmit="openUpdateDialog"
       @deleteEmit="openConfirmDialog"
-      @addEmit="openCreateDialog"
     ></wb-datatable>
-    <md-dialog ref="userCreateDialog">
+    <md-dialog ref="createDialog">
       <md-dialog-title>Create user</md-dialog-title>
 
       <md-dialog-content>
@@ -39,7 +39,7 @@
         <md-button class="md-primary" @click="closeCreateDialog(true)">Create user</md-button>
       </md-dialog-actions>
     </md-dialog>
-    <md-dialog ref="userUpdateDialog">
+    <md-dialog ref="updateDialog">
       <md-dialog-title>Update User</md-dialog-title>
 
       <md-dialog-content>
@@ -66,7 +66,7 @@
         <md-button class="md-primary" @click="closeUpdateDialog(true)">Update user</md-button>
       </md-dialog-actions>
     </md-dialog>
-    <md-dialog ref="userConfirmDialog">
+    <md-dialog ref="confirmDialog">
       <md-dialog-title>Are you sure you would like to remove this user?</md-dialog-title>
 
       <md-dialog-content>
@@ -102,15 +102,14 @@ export default {
         appId: null,
         role: null
       },
-      isNew: false,
-      usersProps: {
+      tableProps: {
         dataext: [],
         columns: null,
         hasControls: true,
         allowCreation: true,
         disableSearch: true,
       },
-      usersColumns: [
+      tableColumns: [
         {name: 'id', displayName: 'ID', visible: true, type:'string', isEditable:false},
         {name: 'name', displayName: 'Name', visible: true, type:'string', isEditable:false},
         {name: 'username', displayName: 'Username', visible: true, type:'string', isEditable:false},
@@ -118,7 +117,6 @@ export default {
         {name: 'microservices', displayName: 'Microservices', visible: true, type:'string', isEditable:false},
         {name: 'apis', displayName: 'APIs', visible: true, type:'string', isEditable:false},
         {name: 'status', displayName: 'Status', visible: true, type:'string', isEditable:false},
-        {name: 'actions', displayName: 'Actions', visible: true, type:'string', isEditable:false},
       ],
     }
   },
@@ -154,14 +152,14 @@ export default {
         .then(() => {
           this.$store.commit('START_REQUEST');
           const clonedUsers = JSON.parse(JSON.stringify(this.users));
-          this.usersProps.dataext = clonedUsers;
+          this.tableProps.dataext = clonedUsers;
           this.$store.commit('FINISH_REQUEST');
 
           this.$store.dispatch('getApps')
         });
     },
     openCreateDialog() {
-      this.$refs.userCreateDialog.open();
+      this.$refs.createDialog.open();
     },
     closeCreateDialog(isSaved) {
       const u = this.newUser;
@@ -174,21 +172,19 @@ export default {
             this.$store.dispatch('createUserFromApp', {
               user: u
             }).then(() => this.getUsers());
-            this.$refs.userCreateDialog.close();
+            this.$refs.createDialog.close();
           }
       } else {
-        this.$refs.userCreateDialog.close();
+        this.$refs.createDialog.close();
       }
     },
     openUpdateDialog(row, columns) {
       if (row) {
         this.user = Object.assign({}, row);
-        this.isNew = false;
       } else {
-        this.isNew = true;
         this.user = null;
       }
-      this.$refs.userUpdateDialog.open();
+      this.$refs.updateDialog.open();
     },
     closeUpdateDialog(isSaved) {
       if (isSaved) {
@@ -197,12 +193,12 @@ export default {
             this.getUsers();
           });
       }
-      this.$refs.userUpdateDialog.close();
+      this.$refs.updateDialog.close();
       this.user = null;
     },
     openConfirmDialog(row) {
       this.user = row;
-      this.$refs.userConfirmDialog.open();
+      this.$refs.confirmDialog.open();
     },
     closeConfirmDialog(isConfirmed) {
       if (isConfirmed) {
@@ -211,11 +207,11 @@ export default {
             this.getUsers();
           })
       }
-      this.$refs.userConfirmDialog.close();
+      this.$refs.confirmDialog.close();
     },
   },
   mounted() {
-    this.usersProps.columns = this.usersColumns;
+    this.tableProps.columns = this.tableColumns;
     this.getUsers();
   }
 }

@@ -280,7 +280,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       managedata.createUserFromApp(payload.user)
         .then(res => {
-          console.log(res);
           commit(CLEAR_MESSAGE);
           commit({
             type: SET_MESSAGE,
