@@ -20,6 +20,7 @@
         v-if="apps && hasCategory(app.Category) && enabled(app) && app.Category !== 'Admin' && app.url"
         v-for="app in sortedApps"
         class="portal-app"
+        :class="[!enabled(app) ? 'disabled' : '']"
         @click="forward(app)"
       >
         <div class="portal-app__image">
@@ -159,5 +160,10 @@ export default {
 .portal-app__name {
   text-align: center;
   margin-top: 20px;
+}
+
+.disabled {
+  opacity: .6;
+  cursor: not-allowed;
 }
 </style>

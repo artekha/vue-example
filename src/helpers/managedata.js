@@ -23,5 +23,29 @@ export default {
   getApis() {
     const url = `${apiUrl}/api/wbAPIs`;
     return utils.get(url, []);
+  },
+  getUserStatuses() {
+    const url = `${apiUrl}/api/WBUsers/allStatuses`;
+    return utils.get(url, []);
+  },
+  getUsers() {
+    const url = `${apiUrl}/api/WBUsers`;
+    return utils.get(url, []);
+  },
+  updateUser(user) {
+    const url = `${apiUrl}/api/WBUsers`;
+    return utils.put(url, user);
+  },
+  deleteUser(id) {
+    const url = `${apiUrl}/api/WBUsers`;
+    return utils.delete(url, id);
+  },
+  getRoles(id) {
+    const url = `${apiUrl}/api/WBApps/roles`;
+    return utils.get(url, [{"key": "appId", "value": id}]);
+  },
+  createUserFromApp(user) {
+    const url = `${apiUrl}/api/WBUsers/createFromApp`;
+    return utils.post(url, user)
   }
 }

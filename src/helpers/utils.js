@@ -35,7 +35,6 @@ export default {
     const token = this.token();
     urlString += '?access_token=' + token;
     return new Promise((resolve, reject) => {
-      console.log(urlString);
       Vue.http.post(urlString, data).then(
         res => {
           resolve(res);
@@ -46,29 +45,36 @@ export default {
       );
     });
   },
-  put(url, data, cb, errcb){
+  put(url, data){
     let urlString = url;
     const token = this.token();
     urlString += '?access_token=' + token;
 
-    Vue.http.put(urlString, data).then(
-      res => {
-        cb(response);
-      },
-      err => {
-        errcb(err);
-      }
-    );
+    return new Promise((resolve, reject) => {
+      Vue.http.put(urlString, data).then(
+        res => {
+          resolve(res);
+        },
+        err => {
+          reject(err);
+        }
+      );
+    })
   },
-  delete(url, id, cb, errcb){
-    Vue.http.delete(url + '/' + id).then(
-      res => {
-        cb(response);
-      },
-      err => {
-        errcb(err);
-      }
-    );
+  delete(url, id){
+    let urlString = `${url}/${id}`;
+    const token = this.token();
+    urlString += '?access_token=' + token;
+    return new Promise((resolve, reject) => {
+      Vue.http.delete(urlString).then(
+        res => {
+          resolve(res);
+        },
+        err => {
+          reject(err);
+        }
+      );
+    })
   },
 
 }

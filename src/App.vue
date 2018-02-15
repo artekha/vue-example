@@ -11,7 +11,6 @@
       :vuexUsing="true"
       :navbarItems="navbarItems"
       :profileMenuItems="profileMenuItems"
-      :title="'WB Portal'"
       :showItems="isLoggedIn"
     ></wb-nav>
     <router-view></router-view>
@@ -102,5 +101,14 @@ body {
   max-width: 400px;
   margin: 0 auto;
   border-bottom: 2px solid #ff9800;
+}
+
+.md-table .md-table-cell .md-table-cell-container {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.md-table .md-table-cell:last-child .md-table-cell-container {
+  padding-left: 0;
 }
 </style>

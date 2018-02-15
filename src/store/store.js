@@ -13,12 +13,16 @@ const LOGOUT = 'LOGOUT';
 const CHANGE_ROUTE = 'CHANGE_ROUTE';
 const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
 const SET_ACTIVE_LINK = 'SET_ACTIVE_LINK';
+const SET_MESSAGE = 'SET_MESSAGE';
 const SET_APPS = 'SET_APPS';
 const SET_SELECTED_CATEGORIES = 'SET_SELECTED_CATEGORIES';
 const SET_CATEGORIES = 'SET_CATEGORIES';
 const SET_ASSIGNMENTS = 'SET_ASSIGNMENTS';
 const SET_MICROSERVICES = 'SET_MICROSERVICES';
 const SET_APIS = 'SET_APIS';
+const SET_USER_STATUSES = 'SET_USER_STATUSES';
+const SET_USERS = 'SET_USERS';
+const SET_ROLES = 'SET_ROLES';
 
 const strict = process.env.NODE_ENV !== 'production';
 
@@ -38,6 +42,9 @@ const getters = {
   assignments: state => state.assignments,
   microservices: state => state.microservices,
   apis: state => state.apis,
+  userStatuses: state => state.userStatuses,
+  users: state => state.users,
+  roles: state => state.roles,
 }
 
 const actions = {
@@ -173,6 +180,121 @@ const actions = {
         commit(FINISH_REQUEST);
         console.log(err)
       });
+  },
+  getUserStatuses({ commit }) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.getUserStatuses()
+        .then(res => {
+          commit(FINISH_REQUEST);
+          commit({
+            type: SET_USER_STATUSES,
+            userStatuses: res.body
+          });
+          resolve();
+        })
+        .catch(err => {
+          commit(FINISH_REQUEST);
+          console.log(err);
+          reject();
+        });
+    });
+  },
+  getUsers({ commit, state }) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.getUsers()
+        .then(res => {
+          const users = res.body;
+          const usersWithStatuses = users.map(user => {
+            const newUser = Object.assign({}, user);
+            newUser.status = state.userStatuses[newUser.id];
+            return newUser;
+          })
+          commit(FINISH_REQUEST);
+          commit({
+            type: SET_USERS,
+            users: usersWithStatuses
+          });
+          resolve();
+        })
+        .catch(err => {
+          commit(FINISH_REQUEST);
+          console.log(err);
+          reject();
+        });
+    });
+  },
+  updateUser({ commit }, user) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.updateUser(user)
+        .then(res => {
+          commit(FINISH_REQUEST);
+          resolve();
+        })
+        .catch(err => {
+          commit(FINISH_REQUEST);
+          console.log(err);
+          reject();
+        })
+    });
+  },
+  deleteUser({ commit }, user) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.deleteUser(user.id)
+        .then(res => {
+          commit(FINISH_REQUEST);
+          resolve();
+        })
+        .catch(err => {
+          commit(FINISH_REQUEST);
+          console.log(err);
+          reject();
+        })
+    });
+  },
+  getRoles({ commit }, payload) {
+    commit(START_REQUEST);
+    const data = (payload && payload.id) || null;
+    return new Promise((resolve, reject) => {
+      managedata.getRoles(data)
+        .then(res => {
+          commit({
+            type: SET_ROLES,
+            roles: res.body
+          });
+          commit(FINISH_REQUEST);
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    });
+  },
+  createUserFromApp({ commit, state }, payload) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.createUserFromApp(payload.user)
+        .then(res => {
+          console.log(res);
+          commit(CLEAR_MESSAGE);
+          commit({
+            type: SET_MESSAGE,
+            message: 'New user added'
+          })
+          commit(FINISH_REQUEST);
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    })
   }
 };
 
@@ -215,6 +337,9 @@ const mutations = {
     state.messageRandom = Math.random();
     state.message = null
   },
+  [SET_MESSAGE](state, payload) {
+    state.message = payload.message;
+  },
   [SET_ACTIVE_LINK](state, payload) {
     const currentItem = payload.currentItem;
     if (currentItem) {
@@ -249,6 +374,15 @@ const mutations = {
   [SET_APIS](state, payload) {
     state.apis = payload.apis;
   },
+  [SET_USER_STATUSES](state, payload) {
+    state.userStatuses = payload.userStatuses;
+  },
+  [SET_USERS](state, payload) {
+    state.users = payload.users;
+  },
+  [SET_ROLES](state, payload) {
+    state.roles = payload.roles;
+  },
 };
 
 const state = {
@@ -265,6 +399,9 @@ const state = {
   assignments: null,
   microservices: null,
   apis: null,
+  userStatuses: null,
+  users: null,
+  roles: null,
   verticals: [
     { name:"Logistics",show:true },
     { name:"Equipment",show:true },

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import VueResoure from 'vue-resource';
 import VueLocalStorage from 'vue-localstorage';
 import VueMaterial from 'vue-material';
+import Vuelidate from 'vuelidate';
 import 'vue-material/dist/vue-material.css';
 
 import { store } from './store/store';
@@ -18,6 +19,7 @@ Vue.use(VueMaterial);
 Vue.use(VueRouter);
 Vue.use(VueResoure);
 Vue.use(VueLocalStorage);
+Vue.use(Vuelidate);
 
 Vue.material.registerTheme({
   default: {
@@ -34,6 +36,7 @@ const routes = [
   { path: '/apis', name:'apis', component: Apis},
   { path: '/admin', name:'admin', component: Admin},
   { path: '/login', name:'login', component: Login},
+  { path: '*', redirect: { name: 'portal' }}
 ];
 
 const router = new VueRouter({ routes });
