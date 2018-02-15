@@ -1,11 +1,12 @@
 import utils from './utils';
 import config from './config';
 
-const apiUrl = config.apiUrl[config.remoteAPI];
+const apiUrl = config.apiUrl[config.localAPI];
 
 export default {
   login(user) {
     const url = `${apiUrl}/api/WBUsers/login`;
+    console.log(url)
     return utils.post(url, user);
   },
   getApps() {
