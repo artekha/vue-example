@@ -293,6 +293,7 @@ const actions = {
           commit(FINISH_REQUEST);
           reject();
         })
+        
     })
   }
 };
