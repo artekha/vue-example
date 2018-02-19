@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import managedata from '../helpers/managedata';
+import config from '../helpers/config';
 
 Vue.use(Vuex);
 
@@ -10,6 +11,9 @@ const FINISH_REQUEST = 'FINISH_REQUEST';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_ERROR = 'LOGIN_ERROR';
 const LOGOUT = 'LOGOUT';
+const SET_ROUTE = 'SET_ROUTE';
+const SET_USER = 'SET_USER';
+const SET_ROLE = 'SET_ROLE';
 const CHANGE_ROUTE = 'CHANGE_ROUTE';
 const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
 const SET_ACTIVE_LINK = 'SET_ACTIVE_LINK';
@@ -23,12 +27,15 @@ const SET_APIS = 'SET_APIS';
 const SET_USER_STATUSES = 'SET_USER_STATUSES';
 const SET_USERS = 'SET_USERS';
 const SET_ROLES = 'SET_ROLES';
+const SET_ORGANIZATIONS = 'SET_ORGANIZATIONS';
 
 const strict = process.env.NODE_ENV !== 'production';
 
 const getters = {
   WBToken: state => state.WBToken,
   userId: state => state.userId,
+  user: state => state.user,
+  role: state => state.role,
   message: state => state.message,
   messageRandom: state => state.messageRandom,
   pending: state => state.pending,
@@ -45,6 +52,7 @@ const getters = {
   userStatuses: state => state.userStatuses,
   users: state => state.users,
   roles: state => state.roles,
+  organizations: state => state.organizations,
 }
 
 const actions = {
@@ -80,6 +88,78 @@ const actions = {
   },
   logout({ commit }) {
     commit(LOGOUT);
+  },
+  forgotPassword({ commit }, email) {
+    if (!email) {
+      commit(CLEAR_MESSAGE);
+      commit({
+        type: SET_MESSAGE,
+        message: 'Email not sent, fill the email field.'
+      });
+      return false;
+    }
+    commit(START_REQUEST);
+    managedata.forgotPassword(email)
+      .then(res => {
+        const message = `An email has been sent to ${email}`;
+        commit(CLEAR_MESSAGE);
+        commit({
+          type: SET_MESSAGE,
+          message
+        })
+        commit(FINISH_REQUEST);
+      })
+      .catch(err => {
+        console.log(err);
+        commit(FINISH_REQUEST);
+      })
+  },
+  changePassword({ commit }, payload) {
+    commit(START_REQUEST);
+    managedata.changePassword(payload.pw, payload.token)
+      .then(res => {
+        const message = `Password has been changed`;
+        commit(CLEAR_MESSAGE);
+        commit({
+          type: SET_MESSAGE,
+          message
+        })
+        commit({
+          type: SET_ROUTE,
+          route: 'login'
+        });
+        commit(FINISH_REQUEST);
+      })
+      .catch(err => {
+        console.log(err);
+        commit(FINISH_REQUEST);
+      })
+  },
+  getUser({ commit, state }) {
+    const userId = state.userId || localStorage.getItem('userId');
+    commit(START_REQUEST);
+    managedata.getUser(userId)
+      .then(res => {
+        const assignmentId = res.body.appAssignments.findIndex(assignment => assignment.appId == config.appId);
+        if (assignmentId < 0) {
+          commit(LOGOUT);
+          console.log(res.body.appAssignments[assignmentId].role)
+        } else {
+          commit({
+            type: SET_ROLE,
+            role: res.body.appAssignments[assignmentId].role
+          });
+        }
+        commit({
+          type: SET_USER,
+          user: res.body
+        });
+        commit(FINISH_REQUEST)
+      })
+      .catch(err => {
+        console.log(err);
+        commit(FINISH_REQUEST);
+      });
   },
   changeRoute({ commit }, item) {
     commit({
@@ -225,6 +305,27 @@ const actions = {
         });
     });
   },
+  createUserFromApp({ commit, state }, payload) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.createUserFromApp(payload.user)
+        .then(res => {
+          commit(CLEAR_MESSAGE);
+          commit({
+            type: SET_MESSAGE,
+            message: 'New user added'
+          })
+          commit(FINISH_REQUEST);
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+
+    })
+  },
   updateUser({ commit }, user) {
     commit(START_REQUEST);
     return new Promise((resolve, reject) => {
@@ -274,27 +375,6 @@ const actions = {
           reject();
         })
     });
-  },
-  createUserFromApp({ commit, state }, payload) {
-    commit(START_REQUEST);
-    return new Promise((resolve, reject) => {
-      managedata.createUserFromApp(payload.user)
-        .then(res => {
-          commit(CLEAR_MESSAGE);
-          commit({
-            type: SET_MESSAGE,
-            message: 'New user added'
-          })
-          commit(FINISH_REQUEST);
-          resolve();
-        })
-        .catch(err => {
-          console.log(err);
-          commit(FINISH_REQUEST);
-          reject();
-        })
-
-    })
   },
   createApp({ commit }, app) {
     commit(START_REQUEST);
@@ -353,7 +433,104 @@ const actions = {
           reject();
         })
     });
-  }
+  },
+  createRole({ commit }, role) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.createRole(role)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
+  updateRole({ commit }, role) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.updateRole(role)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
+  deleteRole({ commit }, role) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.deleteRole(role)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
+  getOrganizations({ commit }) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.getOrganizations()
+        .then(res => {
+          commit({
+            type: SET_ORGANIZATIONS,
+            organizations: res.body
+          });
+          commit(FINISH_REQUEST);
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    });
+  },
+  createOrganization({ commit }, organization) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.createOrganization(organization)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
+  updateOrganization({ commit }, organization) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.updateOrganization(organization)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
+  deleteOrganization({ commit }, organization) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.deleteOrganization(organization)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
 };
 
 const mutations = {
@@ -387,6 +564,15 @@ const mutations = {
   [LOGIN_ERROR](state, payload) {
     this.commit(CLEAR_MESSAGE);
     state.message = payload.response.body.error.message;
+  },
+  [SET_ROUTE](state, payload) {
+    state.route = payload.route;
+  },
+  [SET_USER](state, payload) {
+    state.user = payload.user;
+  },
+  [SET_ROLE](state, payload) {
+    state.role = payload.role;
   },
   [CHANGE_ROUTE](state, payload) {
     state.route = payload.item.url;
@@ -441,6 +627,9 @@ const mutations = {
   [SET_ROLES](state, payload) {
     state.roles = payload.roles;
   },
+  [SET_ORGANIZATIONS](state, payload) {
+    state.organizations = payload.organizations;
+  },
 };
 
 const state = {
@@ -448,6 +637,8 @@ const state = {
   pending: false,
   WBToken: null,
   userId: null,
+  user: null,
+  role: null,
   message: null,
   messageRandom: null,
   route: null,
@@ -460,6 +651,7 @@ const state = {
   userStatuses: null,
   users: null,
   roles: null,
+  organizations: null,
   verticals: [
     { name:"Logistics",show:true },
     { name:"Equipment",show:true },

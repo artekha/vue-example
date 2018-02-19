@@ -30,10 +30,18 @@ export default {
       );
     })
   },
-  post(url, data){
+  post(url, params, data){
     let urlString = url;
     const token = this.token();
-    urlString += '?access_token=' + token;
+    params.push({key:'access_token', value:token});
+
+    for (let i = 0; i < params.length; i++) {
+      i === 0
+        ? urlString += '?'
+        : urlString += '&';
+
+      urlString += `${params[i].key}=${params[i].value}`;
+    }
     return new Promise((resolve, reject) => {
       Vue.http.post(urlString, data).then(
         res => {
@@ -45,10 +53,18 @@ export default {
       );
     });
   },
-  put(url, data){
+  put(url, params, data){
     let urlString = url;
     const token = this.token();
-    urlString += '?access_token=' + token;
+    params.push({key:'access_token', value:token});
+
+    for (let i = 0; i < params.length; i++) {
+      i === 0
+        ? urlString += '?'
+        : urlString += '&';
+
+      urlString += `${params[i].key}=${params[i].value}`;
+    }
 
     return new Promise((resolve, reject) => {
       Vue.http.put(urlString, data).then(

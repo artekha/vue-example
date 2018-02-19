@@ -1,5 +1,23 @@
 <template>
   <div>
+    <md-dialog md-open-from="#forgotPassword" md-close-to="#forgotPassword" ref="forgotPassword">
+      <md-dialog-title>Password reset</md-dialog-title>
+
+      <md-dialog-content>
+        <div>Please enter your email adress.</div>
+        <form @submit.prevent="closeDialog('forgotPassword', true)">
+          <md-input-container>
+            <label>Email</label>
+            <md-input v-model="forgottenEmail"></md-input>
+          </md-input-container>
+        </form>
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="closeDialog('forgotPassword', false)">Cancel</md-button>
+        <md-button class="md-primary" @click="closeDialog('forgotPassword', true)">Ok</md-button>
+      </md-dialog-actions>
+    </md-dialog>
     <div class="auth-area">
       <div class="auth-window">
         <div class="auth-logo">
@@ -19,7 +37,7 @@
               <md-checkbox v-model="remember">Remember me</md-checkbox>
             </div>
             <div class="auth-helpers-part">
-              <div>Forgot your password</div>
+              <div id="forgotPassword" @click="openDialog('forgotPassword')">Forgot your password</div>
             </div>
           </div>
           <div class="auth-actions">
@@ -42,7 +60,8 @@ export default {
         email: null,
         password: null
       },
-      remember: true
+      remember: true,
+      forgottenEmail: null
     }
   },
   methods: {
@@ -52,11 +71,20 @@ export default {
         remember: this.remember
       });
     },
+    openDialog(ref) {
+      this.$refs[ref].open();
+    },
+    closeDialog(ref, isConfirmed) {
+      if (isConfirmed) {
+        this.$store.dispatch('forgotPassword', this.forgottenEmail);
+      }
+      this.$refs[ref].close();
+    },
   },
 }
 </script>
 
-<style scoped>
+<style>
 .auth-area {
   min-height: 100vh;
   height: 100%;

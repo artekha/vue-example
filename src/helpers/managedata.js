@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 import utils from './utils';
 import config from './config';
 
@@ -6,7 +8,47 @@ const loginUrl = config.apiUrl[config.loginAPI];
 export default {
   login(user) {
     const url = `${loginUrl}/api/WBUsers/login`;
-    return utils.post(url, user);
+    return utils.post(url, [], user);
+  },
+  forgotPassword(email) {
+    const creds = {
+      email,
+      location: config.uiUrl[config.localAPI]
+    }
+    const url = `${apiUrl}/api/WBUsers/reset`;
+    return utils.post(url, [],creds);
+  },
+  changePassword(password, token) {
+    let urlString = `${config.urlBase}/api/WBUsers/passwordReset`;
+    let params = [];
+    params.push({key:'access_token', value:token});
+
+    for (let i = 0; i < params.length; i++) {
+      i === 0
+        ? urlString += '?'
+        : urlString += '&';
+
+      urlString += `${params[i].key}=${params[i].value}`;
+    }
+
+    return new Promise((resolve, reject) => {
+      Vue.http.post(urlString, {password}).then(
+        res => {
+          resolve(res);
+        },
+        err => {
+          reject(err);
+        }
+      );
+    })
+  },
+  validatePassword(password) {
+    const url = `${config.urlBase}/api/WBUsers/validateNewPassword`;
+    return utils.get(url, [{"key": "password", "value": password}]);
+  },
+  getUser(id) {
+    const url = `${loginUrl}/api/WBUsers/${id}`;
+    return utils.get(url, [{"key": "filter[include]", "value": "appAssignments"}]);
   },
   getApps() {
     const url = `${apiUrl}/api/wbapps`;
@@ -34,7 +76,7 @@ export default {
   },
   updateUser(user) {
     const url = `${apiUrl}/api/WBUsers`;
-    return utils.put(url, user);
+    return utils.put(url, [], user);
   },
   deleteUser(id) {
     const url = `${apiUrl}/api/WBUsers`;
@@ -54,15 +96,15 @@ export default {
   },
   createUserFromApp(user) {
     const url = `${apiUrl}/api/WBUsers/createFromApp`;
-    return utils.post(url, user)
+    return utils.post(url, [], user)
   },
   createApp(app) {
     const url = `${apiUrl}/api/WBApps`;
-    return utils.post(url, app);
+    return utils.post(url, [], app);
   },
   updateApp(app) {
     const url = `${apiUrl}/api/WBApps`;
-    return utils.put(url, app);
+    return utils.put(url, [], app);
   },
   deleteApp(app) {
     const url = `${apiUrl}/api/WBApps`;
@@ -70,14 +112,30 @@ export default {
   },
   createRole(role) {
     const url = `${apiUrl}/api/UserAppAssignments`;
-    return utils.post(url, role);
+    return utils.post(url, [], role);
   },
   updateRole(role) {
     const url = `${apiUrl}/api/UserAppAssignments`;
-    return utils.put(url, role);
+    return utils.put(url, [], role);
   },
   deleteRole(role) {
     const url = `${apiUrl}/api/UserAppAssignments`;
     return utils.delete(url, role.id);
+  },
+  getOrganizations() {
+    const url = `${apiUrl}/api/Organizations`;
+    return utils.get(url, []);
+  },
+  createOrganization(organization) {
+    const url = `${apiUrl}/api/Organizations`;
+    return utils.post(url, [], organization);
+  },
+  updateOrganization(organization) {
+    const url = `${apiUrl}/api/Organizations`;
+    return utils.put(url, [], organization);
+  },
+  deleteOrganization(organization) {
+    const url = `${apiUrl}/api/Organizations`;
+    return utils.delete(url, organization.id);
   },
 }

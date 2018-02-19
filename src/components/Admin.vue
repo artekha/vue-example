@@ -20,7 +20,9 @@
         <div v-if="currentTab === 3" class="admin-tab">
           <admin-roles></admin-roles>
         </div>
-        <div v-if="currentTab === 4" class="admin-tab">4</div>
+        <div v-if="currentTab === 4" class="admin-tab">
+          <admin-organizations></admin-organizations>
+        </div>
         <div v-if="currentTab === 5" class="admin-tab">5</div>
         <div v-if="currentTab === 6" class="admin-tab">6</div>
         <div v-if="currentTab === 7" class="admin-tab">7</div>
@@ -33,6 +35,7 @@
 import AdminUsers from './AdminTabs/AdminUsers';
 import AdminApps from './AdminTabs/AdminApps';
 import AdminRoles from './AdminTabs/AdminRoles';
+import AdminOrganizations from './AdminTabs/AdminOrganizations';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -41,6 +44,7 @@ export default {
     AdminUsers,
     AdminApps,
     AdminRoles,
+    AdminOrganizations,
   },
   computed: {
     ...mapGetters([

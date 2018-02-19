@@ -7,54 +7,36 @@
       @deleteEmit="openConfirmDialog"
     ></wb-datatable>
     <md-dialog ref="dialog">
-      <md-dialog-title>{{isNew ? 'Create role' : 'Update role'}}</md-dialog-title>
+      <md-dialog-title>{{isNew ? 'Create organization assignment' : 'Update organization assignment'}}</md-dialog-title>
 
       <md-dialog-content>
-        <form v-if="role">
+        <form v-if="organizationAssignment">
           <md-input-container>
-            <label for="userEmail">User</label>
-            <md-select id="userEmail" v-model="role.userEmail">
-              <md-option
-                v-for="(user, index) in usersCopy"
-                :value="user.email"
-                :key="index"
-                @click.native="changeUser(role, user)"
-              >{{user.email}}</md-option>
-            </md-select>
+            <label>Organization name</label>
+            <md-input v-model="organizationAssignment.name"></md-input>
           </md-input-container>
           <md-input-container>
-            <label for="appName">App</label>
-            <md-select id="appName" v-model="role.appName">
-              <md-option
-                v-for="(app, index) in appsCopy"
-                :value="app.Name"
-                :key="index"
-                @click.native="changeApp(role, app)"
-              >{{app.Name}}</md-option>
-            </md-select>
-          </md-input-container>
-          <md-input-container>
-            <label>Role</label>
-            <md-input v-model="role.role"></md-input>
+            <label>Category</label>
+            <md-input v-model="organizationAssignment.category"></md-input>
           </md-input-container>
         </form>
       </md-dialog-content>
 
       <md-dialog-actions>
         <md-button class="md-primary" @click="closeDialog(false)">Cancel</md-button>
-        <md-button class="md-primary" @click="closeDialog(true)">{{isNew ? 'Create role' : 'Update role'}}</md-button>
+        <md-button class="md-primary" @click="closeDialog(true)">{{isNew ? 'Create organization assignment' : 'Update organization assignment'}}</md-button>
       </md-dialog-actions>
     </md-dialog>
     <md-dialog ref="confirmDialog">
-      <md-dialog-title>Are you sure you would like to remove this role?</md-dialog-title>
+      <md-dialog-title>Are you sure you would like to remove this organization assignment?</md-dialog-title>
 
       <md-dialog-content>
-        Role will permanently be removed from the database
+        Organization assignment will permanently be removed from the database
       </md-dialog-content>
 
       <md-dialog-actions>
         <md-button class="md-primary" @click="closeConfirmDialog(false)">Cancel</md-button>
-        <md-button class="md-primary" @click="closeConfirmDialog(true)">Delete role</md-button>
+        <md-button class="md-primary" @click="closeConfirmDialog(true)">Delete</md-button>
       </md-dialog-actions>
     </md-dialog>
   </div>
@@ -65,17 +47,14 @@ import wbDataTable from 'WBDataTable';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: 'AdminRoles',
+  name: 'AdminOrganizationAssignments',
   components: {
     'wb-datatable': wbDataTable
   },
   data() {
     return {
-      role: null,
+      organizationAssignment: null,
       isNew: false,
-      // rolesCopy: null,
-      appsCopy: null,
-      usersCopy: null,
       tableProps: {
         dataext: [],
         columns: null,
@@ -85,9 +64,7 @@ export default {
       },
       tableColumns: [
         {name: 'id', displayName: 'ID', visible: true, type:'number', isEditable:false},
-        {name: 'appName', displayName: 'App Name', visible: true, type:'string', isEditable:false},
-        {name: 'userEmail', displayName: 'User email', visible: true, type:'string', isEditable:false},
-        {name: 'role', displayName: 'Role', visible: true, type:'string', isEditable:false},
+        {name: 'name', displayName: 'Organization', visible: true, type:'string', isEditable:false},
       ],
     }
   },
@@ -95,22 +72,17 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'roles',
-      'apps',
-      'users'
+      'organizations',
     ])
   },
   methods: {
-    changeUser(role, user) {
-      role.user = Object.assign({}, user);
-    },
-    changeApp(role, app) {
-      role.app = Object.assign({}, app);
-    },
-    getRoles() {
-      this.$store.dispatch('getRoles')
+    getOrganizations() {
+      this.$store.dispatch('getOrganizationAssignments')
         .then(() => {
-          const customRoles = this.roles.map(role => {
+          this.tableProps.dataext = JSON.parse(JSON.stringify(this.organizationAssignments));
+        });
+        .then(() => {
+          const customOrganizationAssignments = this.roles.map(role => {
             const appName = role.app ? role.app.Name : null;
             const userEmail = role.user ? role.user.email : null;
             const roleCopy = {
@@ -139,47 +111,36 @@ export default {
       if (row) {
         this.isNew = false;
 
-        this.role = row;
+        this.organization = row;
       } else {
         this.isNew = true;
-        this.role = {
-          userEmail: null,
-          user: null,
-          appName: null,
-          app: null,
-          role: null
+        this.organization = {
+          name: null,
+          category: null
         };
       }
       this.$refs.dialog.open();
     },
     closeDialog(isSaved) {
       if (isSaved) {
-        const actionName = this.isNew ? 'createRole' : 'updateRole';
-        const roleForRequest = {
-          app: Object.assign({}, this.role.app),
-          user: Object.assign({}, this.role.user),
-          role: this.role.role
-        };
-        if (this.role.id) {
-          roleForRequest.id = this.role.id;
-        }
-        this.$store.dispatch(actionName, this.app)
+        const actionName = this.isNew ? 'createOrganization' : 'updateOrganization';
+        this.$store.dispatch(actionName, this.organization)
           .then(() => {
-            this.getRoles();
+            this.getOrganizations();
           });
       }
       this.$refs.dialog.close();
-      this.role = null;
+      this.organization = null;
     },
     openConfirmDialog(row) {
-      this.role = row;
+      this.organization = row;
       this.$refs.confirmDialog.open();
     },
     closeConfirmDialog(isConfirmed) {
       if (isConfirmed) {
-        this.$store.dispatch('deleteRole', this.role)
+        this.$store.dispatch('deleteOrganization', this.organization)
           .then(() => {
-            this.getRoles();
+            this.getOrganizations();
           });
       }
       this.$refs.confirmDialog.close();
@@ -187,7 +148,7 @@ export default {
   },
   mounted() {
     this.tableProps.columns = this.tableColumns;
-    this.getRoles();
+    this.getOrganizations();
   }
 }
 </script>
