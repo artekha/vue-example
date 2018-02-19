@@ -42,7 +42,7 @@ export default {
         email: null,
         password: null
       },
-      remember: false
+      remember: true
     }
   },
   methods: {
@@ -57,9 +57,17 @@ export default {
 </script>
 
 <style scoped>
+.auth-area {
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
 .auth-window {
   max-width: 400px;
-  margin: 0 auto;
+  margin: 20px;
+  margin-top: calc((20vh + 20vw) / 2);
   padding: 20px;
   font-weight: 600;
   font-size: .9rem;
@@ -71,6 +79,12 @@ export default {
 
 .auth-logo {
   user-select: none;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 20px;
+}
+
+.auth-logo img {
   width: 100%;
   height: 100%;
 }

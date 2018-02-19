@@ -255,7 +255,7 @@ const actions = {
         })
     });
   },
-  getRoles({ commit }, payload) {
+  getRolesById({ commit }, payload) {
     commit(START_REQUEST);
     const data = (payload && payload.id) || null;
     return new Promise((resolve, reject) => {
@@ -293,8 +293,66 @@ const actions = {
           commit(FINISH_REQUEST);
           reject();
         })
-        
+
     })
+  },
+  createApp({ commit }, app) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.createApp(app)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
+  updateApp({ commit }, app) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.updateApp(app)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
+  deleteApp({ commit }, app) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.deleteApp(app)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
+  getRoles({ commit }) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.getRoles()
+        .then(res => {
+          commit({
+            type: SET_ROLES,
+            roles: res.body
+          });
+          commit(FINISH_REQUEST);
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    });
   }
 };
 

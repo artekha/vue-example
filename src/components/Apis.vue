@@ -61,7 +61,7 @@ export default {
 }
 
 .api:hover {
-  border-color: #ff9800;
+  border-color: #e3217c;
   box-shadow: none;
 }
 </style>

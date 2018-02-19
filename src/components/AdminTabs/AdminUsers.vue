@@ -22,13 +22,13 @@
           <md-input-container>
             <label for="selectedApp">Select an application</label>
             <md-select name="selectedApp" id="selectedApp" v-model="newUser.appId">
-              <md-option @click.native="selectRoleByAppId(app.id)" v-for="app in apps" :value="app.id">{{app.Name}}</md-option>
+              <md-option @click.native="selectRoleByAppId(app.id)" v-for="(app, index) in apps" :value="app.id" :key="index">{{app.Name}}</md-option>
             </md-select>
           </md-input-container>
           <md-input-container>
             <label for="role">Set a role</label>
-            <md-select name="role" id="role" v-model="newUser.role">
-              <md-option v-if="roles" v-for="role in roles" :value="role">{{role}}</md-option>
+            <md-select :disabled="!newUser.appId" name="role" id="role" v-model="newUser.role">
+              <md-option v-if="roles" v-for="(role, index) in roles" :value="role" :key="index">{{role}}</md-option>
             </md-select>
           </md-input-container>
         </form>
@@ -110,7 +110,7 @@ export default {
         disableSearch: true,
       },
       tableColumns: [
-        {name: 'id', displayName: 'ID', visible: true, type:'string', isEditable:false},
+        {name: 'id', displayName: 'ID', visible: true, type:'number', isEditable:false},
         {name: 'name', displayName: 'Name', visible: true, type:'string', isEditable:false},
         {name: 'username', displayName: 'Username', visible: true, type:'string', isEditable:false},
         {name: 'email', displayName: 'Email', visible: true, type:'string', isEditable:false},
@@ -140,9 +140,8 @@ export default {
   },
   methods: {
     selectRoleByAppId(id) {
-      this.$store.dispatch('getRoles', {
-        id
-      })
+      this.$store.dispatch('getRolesById', { id });
+      this.newUser.role = null;
     },
     getUsers() {
       this.$store.dispatch('getUserStatuses')

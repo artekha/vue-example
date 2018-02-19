@@ -18,7 +18,8 @@
     <div class="portal-apps">
       <div
         v-if="apps && hasCategory(app.Category) && enabled(app) && app.Category !== 'Admin' && app.url"
-        v-for="app in sortedApps"
+        v-for="(app, index) in sortedApps"
+        :key="index"
         class="portal-app"
         :class="[!enabled(app) ? 'disabled' : '']"
         @click="forward(app)"
@@ -120,7 +121,7 @@ export default {
 }
 
 .portal-app:hover {
-  border-color: #ff9800;
+  border-color: #e3217c;
   box-shadow: none;
 }
 
@@ -139,7 +140,8 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #ff9800;
+  border-radius: 50%;
+  background: #e3217c;
   color: #fff;
   text-shadow: 1px 3px 1px rgba(0,0,0,.3);
   display: flex;
@@ -155,6 +157,7 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 20;
+  border-radius: 50%;
 }
 
 .portal-app__name {

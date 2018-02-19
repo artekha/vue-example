@@ -23,8 +23,10 @@ Vue.use(Vuelidate);
 
 Vue.material.registerTheme({
   default: {
-    primary: 'orange',
-    accent: 'black',
+    primary: 'amber',
+    accent: 'amber',
+    warn: 'amber',
+    background: 'white'
   }
 });
 

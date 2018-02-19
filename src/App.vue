@@ -3,15 +3,18 @@
     <div class="preloader">
       <md-progress
         v-if="pending"
-        class="md-warn"
+        class="md-blue"
         md-indeterminate
       ></md-progress>
     </div>
     <wb-nav
+      v-if="isLoggedIn"
       :vuexUsing="true"
       :navbarItems="navbarItems"
       :profileMenuItems="profileMenuItems"
       :showItems="isLoggedIn"
+      :navLogo="'/static/logo-white.png'"
+      :mainColor="'#43B3FF'"
     ></wb-nav>
     <router-view></router-view>
     <md-snackbar :md-position="'bottom left'" ref="snackbar" :md-duration="2000">
@@ -73,6 +76,20 @@ body {
 }
 #app nav.navbar {
   border-bottom: 1px solid #ccc !important;
+  background: #0A2052;
+  display: flex;
+  align-items: center;
+  height: 80px;
+}
+
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+  background-color: #ffffff !important;
+  -webkit-text-fill-color: #2196f3;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+#app img.navbar-brand.showed-items {
+  border: none;
 }
 
 #app nav.navbar a.nav-item.nav-link {
@@ -80,14 +97,28 @@ body {
   font-size: .9rem;
 }
 
+#app nav.navbar .navbar-brand-image {
+  height: 50px !important;
+  padding: 0 20px;
+}
+
 #app .nav>.nav-item.nav-link>a {
   border: none !important;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
 }
+
+#app button.navbar-user-button {
+  color: #fff !important;
+}
+
 .preloader {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
+  z-index: 999999999999;
 }
 .main-headline {
   font-weight: 600;
@@ -100,7 +131,7 @@ body {
   padding: 20px;
   max-width: 400px;
   margin: 0 auto;
-  border-bottom: 2px solid #ff9800;
+  border-bottom: 2px solid #e3217c;
 }
 
 .md-table .md-table-cell .md-table-cell-container {

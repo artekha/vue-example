@@ -17,7 +17,9 @@
         <div v-if="currentTab === 2" class="admin-tab">
           <admin-apps></admin-apps>
         </div>
-        <div v-if="currentTab === 3" class="admin-tab">3</div>
+        <div v-if="currentTab === 3" class="admin-tab">
+          <admin-roles></admin-roles>
+        </div>
         <div v-if="currentTab === 4" class="admin-tab">4</div>
         <div v-if="currentTab === 5" class="admin-tab">5</div>
         <div v-if="currentTab === 6" class="admin-tab">6</div>
@@ -30,13 +32,15 @@
 <script>
 import AdminUsers from './AdminTabs/AdminUsers';
 import AdminApps from './AdminTabs/AdminApps';
+import AdminRoles from './AdminTabs/AdminRoles';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'Admin',
   components: {
     AdminUsers,
-    AdminApps
+    AdminApps,
+    AdminRoles,
   },
   computed: {
     ...mapGetters([
@@ -56,7 +60,6 @@ export default {
 .admin-triggers {
   display: flex;
   justify-content: center;
-  align-items: center;
   border-bottom: 1px solid #ccc;
 }
 
@@ -66,10 +69,15 @@ export default {
   user-select: none;
   cursor: pointer;
   transition: all .2s;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  color: #999;
 }
 
 .admin-trigger_active {
-  border-bottom: 2px solid #ff9800;
-  color: #ff9800;
+  border-bottom: 2px solid #e3217c;
+  color: #000;
 }
 </style>
