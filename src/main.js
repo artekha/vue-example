@@ -39,6 +39,7 @@ const routes = [
   { path: '/apis', name:'apis', component: Apis},
   { path: '/admin', name:'admin', component: Admin},
   { path: '/login', name:'login', component: Login},
+  { path: '/externallogin', name:'externallogin', component: Login},
   { path: '/passwordchange', name:'passwordchange', component: PasswordChange},
   { path: '*', redirect: { name: 'portal' }}
 ];
@@ -48,9 +49,9 @@ const router = new VueRouter({ routes });
 router.beforeEach((to, from, next) => {
   next();
   const token = store.state.WBToken || localStorage.getItem('WBToken');
-  if ((!token || token === '') && to.path !== '/login' && to.path !== '/passwordchange') {
+  if ((!token || token === '') && to.path !== '/login' && to.path !== '/passwordchange' && to.path !== '/externallogin') {
     next('/login');
-  } else if ((token && token !== '') && to.path === '/login' && to.path !== '/passwordchange') {
+  } else if ((token && token !== '') && to.path === '/login' && to.path !== '/passwordchange' && to.path !== '/externallogin') {
     next('/portal');
   } else {
     next();

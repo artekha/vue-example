@@ -68,7 +68,7 @@ const actions = {
             response: res.body,
             remember: creds.remember
           });
-          if (neededRoute) {
+          if (neededRoute && !creds.isExternal) {
             commit({
               type: CHANGE_ROUTE,
               item: neededRoute

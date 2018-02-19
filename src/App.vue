@@ -8,7 +8,7 @@
       ></md-progress>
     </div>
     <wb-nav
-      v-if="isLoggedIn"
+      v-if="isLoggedIn && ($route.path !== '/externallogin' && $route.path !== '/passwordchange')"
       :vuexUsing="true"
       :navbarItems="navbarItems"
       :profileMenuItems="profileMenuItems"

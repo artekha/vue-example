@@ -34,7 +34,8 @@
           </md-input-container>
           <div class="auth-helpers">
             <div class="auth-helpers-part">
-              <md-checkbox v-model="remember">Remember me</md-checkbox>
+              <md-checkbox v-if="!isExternal" v-model="remember">Remember me</md-checkbox>
+              <md-checkbox v-if="isExternal" v-model="rememberAll">Remember me in all WidgetBrain apps</md-checkbox>
             </div>
             <div class="auth-helpers-part">
               <div id="forgotPassword" @click="openDialog('forgotPassword')">Forgot your password</div>
@@ -51,24 +52,48 @@
 
 <script>
 import managedata from '../helpers/managedata';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Login',
   data() {
     return {
+      isExternal: false,
       user: {
         email: null,
         password: null
       },
       remember: true,
+      rememberAll: false,
       forgottenEmail: null
     }
+  },
+  computed: {
+    ...mapGetters([
+      'WBToken',
+      'userId'
+    ])
   },
   methods: {
     login() {
       this.$store.dispatch('login', {
         user: this.user,
-        remember: this.remember
+        remember: this.remember,
+        rememberAll: this.rememberAll,
+        isExternal: this.isExternal
+      }).then(res => {
+        if (this.isExternal) {
+          const message = {
+            message: "loggedIn",
+            token: this.WBToken,
+            userId: this.userId,
+            remember: this.rememberAll || this.remember
+          }
+
+          console.log(message);
+
+          window.parent.postMessage(message,"*")
+        }
       });
     },
     openDialog(ref) {
@@ -80,11 +105,46 @@ export default {
       }
       this.$refs[ref].close();
     },
+    checkToken() {
+      const token = this.WBToken || localStorage.getItem('WBToken');
+      const userId = this.userId || localStorage.getItem('userId');
+
+      console.log(`token`, token,  'userId', userId);
+
+      if (token && userId) {
+        if (this.$route.query.logout) {
+          this.$store.commit('LOGOUT');
+        } else {
+          this.$store.dispatch('getUser')
+            .then(res => {
+              var message = {
+                message: "loggedIn",
+                token: token,
+                userId: userId,
+                remember: true
+              }
+              console.log('fire!')
+              window.parent.postMessage(message, "*");
+            })
+        }
+      }
+    },
   },
+  mounted() {
+    if (this.$route.path === '/externallogin') {
+      this.isExternal = true;
+      this.checkToken();
+    }
+  }
 }
 </script>
 
 <style>
+#forgotPassword:hover {
+  color:#ec217e;
+  text-decoration: underline;
+  cursor: pointer;
+}
 .auth-area {
   min-height: 100vh;
   height: 100%;
