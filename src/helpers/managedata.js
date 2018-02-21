@@ -5,6 +5,8 @@ import config from './config';
 
 const apiUrl = config.apiUrl[config.remoteAPI];
 const loginUrl = config.apiUrl[config.loginAPI];
+const urlBase = config.urlBase;
+
 export default {
   login(user) {
     const url = `${loginUrl}/api/WBUsers/login`;
@@ -19,7 +21,7 @@ export default {
     return utils.post(url, [],creds);
   },
   changePassword(password, token) {
-    let urlString = `${config.urlBase}/api/WBUsers/passwordReset`;
+    let urlString = `${urlBase}/api/WBUsers/passwordReset`;
     let params = [];
     params.push({key:'access_token', value:token});
 
@@ -43,7 +45,7 @@ export default {
     })
   },
   validatePassword(password) {
-    const url = `${config.urlBase}/api/WBUsers/validateNewPassword`;
+    const url = `${urlBase}/api/WBUsers/validateNewPassword`;
     return utils.get(url, [{"key": "password", "value": password}]);
   },
   getUser(id) {
@@ -137,5 +139,40 @@ export default {
   deleteOrganization(organization) {
     const url = `${apiUrl}/api/Organizations`;
     return utils.delete(url, organization.id);
+  },
+  getOrganizationAssignments() {
+    let params = [];
+    const url = `${apiUrl}/api/UserOrganizationAssignments`;
+    params.push({"key": "filter", "value": "%7B%22include%22%3A[%22organization%22,%22user%22]%7D"});
+    return utils.get(url, params);
+  },
+  createOrganizationAssignment(organizationAssignment) {
+    const url = `${apiUrl}/api/UserOrganizationAssignments`;
+    return utils.post(url, [], organizationAssignment);
+  },
+  updateOrganizationAssignment(organizationAssignment) {
+    const url = `${apiUrl}/api/UserOrganizationAssignments`;
+    return utils.put(url, [], organizationAssignment);
+  },
+  deleteOrganizationAssignment(organizationAssignment) {
+    const url = `${apiUrl}/api/UserOrganizationAssignments`;
+    return utils.delete(url, organizationAssignment.id);
+  },
+  getWBAlgorithmUsers() {
+    let params = [];
+    const url = `${urlBase}/api/wbAlgorithmUsers`;
+    return utils.get(url, []);
+  },
+  createWBAlgorithmUser(user) {
+    const url = `${apiUrl}/api/wbAlgorithmUsers`;
+    return utils.post(url, [], user);
+  },
+  updateWBAlgorithmUser(user) {
+    const url = `${apiUrl}/api/wbAlgorithmUsers`;
+    return utils.put(url, [], user);
+  },
+  deleteWBAlgorithmUser(user) {
+    const url = `${apiUrl}/api/wbAlgorithmUsers`;
+    return utils.delete(url, user.id);
   },
 }

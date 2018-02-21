@@ -11,6 +11,7 @@ import { store } from './store/store';
 import App from './App';
 import Login from './components/Login';
 import PasswordChange from './components/PasswordChange';
+import Activate from './components/Activate';
 import Portal from './components/Portal';
 import Microservices from './components/Microservices';
 import Apis from './components/Apis';
@@ -41,6 +42,7 @@ const routes = [
   { path: '/login', name:'login', component: Login},
   { path: '/externallogin', name:'externallogin', component: Login},
   { path: '/passwordchange', name:'passwordchange', component: PasswordChange},
+  { path: '/activate', name:'activate', component: Activate},
   { path: '*', redirect: { name: 'portal' }}
 ];
 

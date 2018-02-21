@@ -28,6 +28,8 @@ const SET_USER_STATUSES = 'SET_USER_STATUSES';
 const SET_USERS = 'SET_USERS';
 const SET_ROLES = 'SET_ROLES';
 const SET_ORGANIZATIONS = 'SET_ORGANIZATIONS';
+const SET_ORGANIZATION_ASSIGNMENT = 'SET_ORGANIZATION_ASSIGNMENT';
+const SET_WB_ALGORITHM_USERS = 'SET_WB_ALGORITHM_USERS';
 
 const strict = process.env.NODE_ENV !== 'production';
 
@@ -53,6 +55,8 @@ const getters = {
   users: state => state.users,
   roles: state => state.roles,
   organizations: state => state.organizations,
+  organizationAssignments: state => state.organizationAssignments,
+  WBAlgorithmUsers: state => state.WBAlgorithmUsers,
 }
 
 const actions = {
@@ -531,6 +535,122 @@ const actions = {
         })
     })
   },
+  getOrganizationAssignments({ commit }) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.getOrganizationAssignments()
+        .then(res => {
+          commit({
+            type: SET_ORGANIZATION_ASSIGNMENT,
+            organizationAssignments: res.body
+          });
+          commit(FINISH_REQUEST);
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    });
+  },
+  createOrganizationAssignment({ commit }, organization) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.createOrganization(organization)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
+  updateOrganizationAssignment({ commit }, organization) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.updateOrganization(organization)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
+  deleteOrganizationAssignment({ commit }, organization) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.deleteOrganization(organization)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
+  getWBAlgorithmUsers({ commit }) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.getWBAlgorithmUsers()
+        .then(res => {
+          commit({
+            type: SET_WB_ALGORITHM_USERS,
+            WBAlgorithmUsers: res.body
+          });
+          commit(FINISH_REQUEST);
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    });
+  },
+  createWBAlgorithmUser({ commit }, WBAlgorithmUser) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.createWBAlgorithmUser(WBAlgorithmUser)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
+  updateWBAlgorithmUser({ commit }, WBAlgorithmUser) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.updateWBAlgorithmUser(WBAlgorithmUser)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
+  deleteWBAlgorithmUser({ commit }, WBAlgorithmUsers) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.deleteWBAlgorithmUser(WBAlgorithmUsers)
+        .then(() => {
+          commit(FINISH_REQUEST);
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST)
+        })
+    })
+  },
 };
 
 const mutations = {
@@ -630,6 +750,12 @@ const mutations = {
   [SET_ORGANIZATIONS](state, payload) {
     state.organizations = payload.organizations;
   },
+  [SET_ORGANIZATION_ASSIGNMENT](state, payload) {
+    state.organizationAssignments = payload.organizationAssignments;
+  },
+  [SET_WB_ALGORITHM_USERS](state, payload) {
+    state.WBAlgorithmUsers = payload.WBAlgorithmUsers;
+  },
 };
 
 const state = {
@@ -652,6 +778,8 @@ const state = {
   users: null,
   roles: null,
   organizations: null,
+  organizationAssignments: null,
+  WBAlgorithmUsers: null,
   verticals: [
     { name:"Logistics",show:true },
     { name:"Equipment",show:true },

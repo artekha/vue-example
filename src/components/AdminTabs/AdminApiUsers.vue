@@ -7,18 +7,21 @@
       @deleteEmit="openConfirmDialog"
     ></wb-datatable>
     <md-dialog ref="dialog">
-      <md-dialog-title>{{isNew ? 'Create organization' : 'Update organization'}}</md-dialog-title>
+      <md-dialog-title>{{isNew ? 'Create wb algorithm user' : 'Update wb algorithm user'}}</md-dialog-title>
 
       <md-dialog-content>
-        <form v-if="organization">
+        <form v-if="user">
           <md-input-container>
-            <label>Organization name</label>
-            <md-input v-model="organization.name"></md-input>
+            <label>Name</label>
+            <md-input v-model="user.name"></md-input>
           </md-input-container>
           <md-input-container>
-            <label>Category</label>
-            <md-input v-model="organization.category"></md-input>
+            <label>Auth0 Client Id</label>
+            <md-input v-model="user.auth0ClientId"></md-input>
           </md-input-container>
+          <div>
+            <md-switch id="userIsAdmin" v-model="user.isAdmin">Is Admin</md-switch>
+          </div>
         </form>
       </md-dialog-content>
 
@@ -28,10 +31,10 @@
       </md-dialog-actions>
     </md-dialog>
     <md-dialog ref="confirmDialog">
-      <md-dialog-title>Are you sure you would like to remove this organization?</md-dialog-title>
+      <md-dialog-title>Are you sure you would like to remove this wb algorithm user?</md-dialog-title>
 
       <md-dialog-content>
-        Organization will permanently be removed from the database
+        WB algorithm user will permanently be removed from the database
       </md-dialog-content>
 
       <md-dialog-actions>
@@ -47,13 +50,13 @@ import wbDataTable from 'WBDataTable';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: 'AdminOrganizations',
+  name: 'AdminApiUsers',
   components: {
     'wb-datatable': wbDataTable
   },
   data() {
     return {
-      organization: null,
+      user: null,
       isNew: false,
       tableProps: {
         dataext: [],
@@ -64,7 +67,9 @@ export default {
       },
       tableColumns: [
         {name: 'id', displayName: 'ID', visible: true, type:'number', isEditable:false},
-        {name: 'name', displayName: 'Organization', visible: true, type:'string', isEditable:false},
+        {name: 'name', displayName: 'Name', visible: true, type:'string', isEditable:false},
+        {name: 'auth0ClientId', displayName: 'Auth 0 Client ID', visible: true, type:'string', isEditable:false},
+        {name: 'isAdmin', displayName: 'Is Admin', visible: true, type:'string', isEditable:false},
       ],
     }
   },
@@ -72,50 +77,51 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'organizations',
+      'WBAlgorithmUsers',
     ])
   },
   methods: {
-    getOrganizations() {
-      this.$store.dispatch('getOrganizations')
+    getWBAlgorithmUsers() {
+      this.$store.dispatch('getWBAlgorithmUsers')
         .then(() => {
-          this.tableProps.dataext = JSON.parse(JSON.stringify(this.organizations));
+          this.tableProps.dataext = JSON.parse(JSON.stringify(this.WBAlgorithmUsers));
         });
     },
     openDialog(row) {
       if (row) {
         this.isNew = false;
 
-        this.organization = row;
+        this.user = row;
       } else {
         this.isNew = true;
-        this.organization = {
+        this.user = {
           name: null,
-          category: null
+          auth0ClientId: null,
+          isAdmin: false
         };
       }
       this.$refs.dialog.open();
     },
     closeDialog(isSaved) {
       if (isSaved) {
-        const actionName = this.isNew ? 'createOrganization' : 'updateOrganization';
-        this.$store.dispatch(actionName, this.organization)
+        const actionName = this.isNew ? 'createWBAlgorithmUser' : 'updateWBAlgorithmUser';
+        this.$store.dispatch(actionName, this.user)
           .then(() => {
-            this.getOrganizations();
+            this.getWBAlgorithmUsers();
           });
       }
       this.$refs.dialog.close();
-      this.organization = null;
+      this.user = null;
     },
     openConfirmDialog(row) {
-      this.organization = row;
+      this.user = row;
       this.$refs.confirmDialog.open();
     },
     closeConfirmDialog(isConfirmed) {
       if (isConfirmed) {
-        this.$store.dispatch('deleteOrganization', this.organization)
+        this.$store.dispatch('deleteWBAlgorithmUser', this.user)
           .then(() => {
-            this.getOrganizations();
+            this.getWBAlgorithmUsers();
           });
       }
       this.$refs.confirmDialog.close();
@@ -123,7 +129,7 @@ export default {
   },
   mounted() {
     this.tableProps.columns = this.tableColumns;
-    this.getOrganizations();
+    this.getWBAlgorithmUsers();
   }
 }
 </script>

@@ -12,19 +12,33 @@
       <md-dialog-content>
         <form v-if="organizationAssignment">
           <md-input-container>
-            <label>Organization name</label>
-            <md-input v-model="organizationAssignment.name"></md-input>
+            <label for="userEmail">User</label>
+            <md-select id="userEmail" v-model="organizationAssignment.userEmail">
+              <md-option
+                v-for="(user, index) in usersCopy"
+                :value="user.email"
+                :key="index"
+                @click.native="changeUser(organizationAssignment, user)"
+              >{{user.email}}</md-option>
+            </md-select>
           </md-input-container>
           <md-input-container>
-            <label>Category</label>
-            <md-input v-model="organizationAssignment.category"></md-input>
+            <label for="organizationName">Organization</label>
+            <md-select id="organizationName" v-model="organizationAssignment.organizationName">
+              <md-option
+                v-for="(organization, index) in organizationsCopy"
+                :value="organization.name"
+                :key="index"
+                @click.native="changeOrganization(organizationAssignment, organization)"
+              >{{organization.name}}</md-option>
+            </md-select>
           </md-input-container>
         </form>
       </md-dialog-content>
 
       <md-dialog-actions>
         <md-button class="md-primary" @click="closeDialog(false)">Cancel</md-button>
-        <md-button class="md-primary" @click="closeDialog(true)">{{isNew ? 'Create organization assignment' : 'Update organization assignment'}}</md-button>
+        <md-button class="md-primary" @click="closeDialog(true)">{{isNew ? 'Create' : 'Update'}}</md-button>
       </md-dialog-actions>
     </md-dialog>
     <md-dialog ref="confirmDialog">
@@ -55,6 +69,8 @@ export default {
     return {
       organizationAssignment: null,
       isNew: false,
+      organizationsCopy: null,
+      usersCopy: null,
       tableProps: {
         dataext: [],
         columns: null,
@@ -64,7 +80,9 @@ export default {
       },
       tableColumns: [
         {name: 'id', displayName: 'ID', visible: true, type:'number', isEditable:false},
-        {name: 'name', displayName: 'Organization', visible: true, type:'string', isEditable:false},
+        {name: 'organizationName', displayName: 'Organization', visible: true, type:'string', isEditable:false},
+        {name: 'userEmail', displayName: 'User email', visible: true, type:'string', isEditable:false},
+
       ],
     }
   },
@@ -72,33 +90,39 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'organizationAssignments',
       'organizations',
+      'users',
     ])
   },
   methods: {
-    getOrganizations() {
+    changeUser(organizationAssignment, user) {
+      organizationAssignment.user = Object.assign({}, user);
+    },
+    changeOrganization(organizationAssignment, organization) {
+      organizationAssignment.organization = Object.assign({}, organization);
+    },
+    getOrganizationAssignmens() {
       this.$store.dispatch('getOrganizationAssignments')
         .then(() => {
-          this.tableProps.dataext = JSON.parse(JSON.stringify(this.organizationAssignments));
-        });
-        .then(() => {
-          const customOrganizationAssignments = this.roles.map(role => {
-            const appName = role.app ? role.app.Name : null;
-            const userEmail = role.user ? role.user.email : null;
-            const roleCopy = {
-              id: role.id,
-              app: role.app,
-              appName: appName,
-              user: role.user,
+          const customOrganizationAssignments = this.organizationAssignments.map(organizationAssignment => {
+            const organizationName = organizationAssignment.organization ? organizationAssignment.organization.name : null;
+            const userEmail = organizationAssignment.user ? organizationAssignment.user.email : null;
+            const organizationAssignmentCopy = {
+              id: organizationAssignment.id,
+              organization: organizationAssignment.organization,
+              organizationName: organizationName,
+              user: organizationAssignment.user,
+              userId: organizationAssignment.userId,
               userEmail: userEmail,
-              role: role.role
-            }
-            return roleCopy;
+              organizationId: organizationAssignment.organizationId
+            };
+            return organizationAssignmentCopy;
           });
-          this.tableProps.dataext = customRoles;
-          this.$store.dispatch('getApps')
+          this.tableProps.dataext = customOrganizationAssignments;
+          this.$store.dispatch('getOrganizations')
             .then(() => {
-              this.appsCopy = JSON.parse(JSON.stringify(this.apps));
+              this.organizationsCopy = JSON.parse(JSON.stringify(this.organizations));
             });
 
           this.$store.dispatch('getUsers')
@@ -111,36 +135,50 @@ export default {
       if (row) {
         this.isNew = false;
 
-        this.organization = row;
+        this.organizationAssignment = row;
       } else {
         this.isNew = true;
-        this.organization = {
-          name: null,
-          category: null
+        this.organizationAssignment = {
+          organization: null,
+          organizationName: null,
+          user: null,
+          userId: null,
+          userEmail: null,
+          organizationId: null
         };
       }
       this.$refs.dialog.open();
     },
     closeDialog(isSaved) {
       if (isSaved) {
-        const actionName = this.isNew ? 'createOrganization' : 'updateOrganization';
-        this.$store.dispatch(actionName, this.organization)
+        const actionName = this.isNew ? 'createOrganizationAssignment' : 'updateOrganizationAssignment';
+        const organizationAssignmentForRequest = {
+          organization: this.organizationAssignment.organization ? Object.assign({}, this.organizationAssignment.organization) : null,
+          user: this.organizationAssignment.user ? Object.assign({}, this.organizationAssignment.user) : null,
+          userId: this.organizationAssignment.user ? this.organizationAssignment.user.id : null,
+          organizationId: this.organizationAssignment.organization ? this.organizationAssignment.organization.id : null
+        };
+        if (this.organizationAssignment.id) {
+          organizationAssignmentForRequest.id = this.organizationAssignment.id;
+        }
+
+        this.$store.dispatch(actionName, this.app)
           .then(() => {
-            this.getOrganizations();
+            this.getArganizationAssignments();
           });
       }
       this.$refs.dialog.close();
-      this.organization = null;
+      this.organizationAssignment = null;
     },
     openConfirmDialog(row) {
-      this.organization = row;
+      this.organizationAssignment = row;
       this.$refs.confirmDialog.open();
     },
     closeConfirmDialog(isConfirmed) {
       if (isConfirmed) {
-        this.$store.dispatch('deleteOrganization', this.organization)
+        this.$store.dispatch('deleteOrganizationAssignment', this.organizationAssignment)
           .then(() => {
-            this.getOrganizations();
+            this.getOrganizationAssignmens();
           });
       }
       this.$refs.confirmDialog.close();
@@ -148,7 +186,7 @@ export default {
   },
   mounted() {
     this.tableProps.columns = this.tableColumns;
-    this.getOrganizations();
+    this.getOrganizationAssignmens();
   }
 }
 </script>

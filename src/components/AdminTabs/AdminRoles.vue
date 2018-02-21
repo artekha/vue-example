@@ -42,7 +42,7 @@
 
       <md-dialog-actions>
         <md-button class="md-primary" @click="closeDialog(false)">Cancel</md-button>
-        <md-button class="md-primary" @click="closeDialog(true)">{{isNew ? 'Create role' : 'Update role'}}</md-button>
+        <md-button class="md-primary" @click="closeDialog(true)">{{isNew ? 'Create' : 'Update'}}</md-button>
       </md-dialog-actions>
     </md-dialog>
     <md-dialog ref="confirmDialog">
@@ -54,7 +54,7 @@
 
       <md-dialog-actions>
         <md-button class="md-primary" @click="closeConfirmDialog(false)">Cancel</md-button>
-        <md-button class="md-primary" @click="closeConfirmDialog(true)">Delete role</md-button>
+        <md-button class="md-primary" @click="closeConfirmDialog(true)">Delete</md-button>
       </md-dialog-actions>
     </md-dialog>
   </div>

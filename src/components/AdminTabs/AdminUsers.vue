@@ -36,7 +36,7 @@
 
       <md-dialog-actions>
         <md-button class="md-primary" @click="closeCreateDialog(false)">Cancel</md-button>
-        <md-button class="md-primary" @click="closeCreateDialog(true)">Create user</md-button>
+        <md-button class="md-primary" @click="closeCreateDialog(true)">Create</md-button>
       </md-dialog-actions>
     </md-dialog>
     <md-dialog ref="updateDialog">
@@ -63,7 +63,7 @@
 
       <md-dialog-actions>
         <md-button class="md-primary" @click="closeUpdateDialog(false)">Cancel</md-button>
-        <md-button class="md-primary" @click="closeUpdateDialog(true)">Update user</md-button>
+        <md-button class="md-primary" @click="closeUpdateDialog(true)">Update</md-button>
       </md-dialog-actions>
     </md-dialog>
     <md-dialog ref="confirmDialog">
@@ -75,7 +75,7 @@
 
       <md-dialog-actions>
         <md-button class="md-primary" @click="closeConfirmDialog(false)">Cancel</md-button>
-        <md-button class="md-primary" @click="closeConfirmDialog(true)">Delete user</md-button>
+        <md-button class="md-primary" @click="closeConfirmDialog(true)">Delete</md-button>
       </md-dialog-actions>
     </md-dialog>
   </div>

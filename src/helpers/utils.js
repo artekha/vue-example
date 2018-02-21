@@ -28,7 +28,7 @@ export default {
           reject(err);
         }
       );
-    })
+    });
   },
   post(url, params, data){
     let urlString = url;
@@ -75,7 +75,7 @@ export default {
           reject(err);
         }
       );
-    })
+    });
   },
   delete(url, id){
     let urlString = `${url}/${id}`;
@@ -90,7 +90,7 @@ export default {
           reject(err);
         }
       );
-    })
+    });
   },
 
 }

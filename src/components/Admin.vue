@@ -9,6 +9,7 @@
         <div @click="currentTab = 5" class="admin-trigger" :class="[currentTab === 5 ? 'admin-trigger_active' : '']">Organization Assignments</div>
         <div @click="currentTab = 6" class="admin-trigger" :class="[currentTab === 6 ? 'admin-trigger_active' : '']">Api Users</div>
         <div @click="currentTab = 7" class="admin-trigger" :class="[currentTab === 7 ? 'admin-trigger_active' : '']">Api User Assignments</div>
+        <div @click="currentTab = 8" class="admin-trigger" :class="[currentTab === 8 ? 'admin-trigger_active' : '']">Api User Organization Assignments</div>
       </div>
       <div class="admin-tabs">
         <div v-if="currentTab === 1" class="admin-tab">
@@ -23,9 +24,14 @@
         <div v-if="currentTab === 4" class="admin-tab">
           <admin-organizations></admin-organizations>
         </div>
-        <div v-if="currentTab === 5" class="admin-tab">5</div>
-        <div v-if="currentTab === 6" class="admin-tab">6</div>
+        <div v-if="currentTab === 5" class="admin-tab">
+          <admin-organization-assignments></admin-organization-assignments>
+        </div>
+        <div v-if="currentTab === 6" class="admin-tab">
+          <admin-api-users></admin-api-users>
+        </div>
         <div v-if="currentTab === 7" class="admin-tab">7</div>
+        <div v-if="currentTab === 8" class="admin-tab">7</div>
       </div>
     </div>
   </div>
@@ -36,6 +42,8 @@ import AdminUsers from './AdminTabs/AdminUsers';
 import AdminApps from './AdminTabs/AdminApps';
 import AdminRoles from './AdminTabs/AdminRoles';
 import AdminOrganizations from './AdminTabs/AdminOrganizations';
+import AdminOrganizationAssignments from './AdminTabs/AdminOrganizationAssignments';
+import AdminApiUsers from './AdminTabs/AdminApiUsers';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -45,6 +53,8 @@ export default {
     AdminApps,
     AdminRoles,
     AdminOrganizations,
+    AdminOrganizationAssignments,
+    AdminApiUsers,
   },
   computed: {
     ...mapGetters([
