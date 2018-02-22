@@ -155,7 +155,7 @@ export default {
 .auth-window {
   max-width: 400px;
   margin: 20px;
-  margin-top: calc((20vh + 20vw) / 2);
+  margin-top: 10%;
   padding: 20px;
   font-weight: 600;
   font-size: .9rem;

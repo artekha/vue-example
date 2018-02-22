@@ -95,7 +95,6 @@ const actions = {
   },
   forgotPassword({ commit }, email) {
     if (!email) {
-      commit(CLEAR_MESSAGE);
       commit({
         type: SET_MESSAGE,
         message: 'Email not sent, fill the email field.'
@@ -106,7 +105,6 @@ const actions = {
     managedata.forgotPassword(email)
       .then(res => {
         const message = `An email has been sent to ${email}`;
-        commit(CLEAR_MESSAGE);
         commit({
           type: SET_MESSAGE,
           message
@@ -123,7 +121,6 @@ const actions = {
     managedata.changePassword(payload.pw, payload.token)
       .then(res => {
         const message = `Password has been changed`;
-        commit(CLEAR_MESSAGE);
         commit({
           type: SET_MESSAGE,
           message
@@ -314,7 +311,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       managedata.createUserFromApp(payload.user)
         .then(res => {
-          commit(CLEAR_MESSAGE);
           commit({
             type: SET_MESSAGE,
             message: 'New user added'
@@ -336,6 +332,10 @@ const actions = {
       managedata.updateUser(user)
         .then(res => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'User updated'
+          })
           resolve();
         })
         .catch(err => {
@@ -351,6 +351,10 @@ const actions = {
       managedata.deleteUser(user.id)
         .then(res => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'User deleted'
+          })
           resolve();
         })
         .catch(err => {
@@ -386,10 +390,16 @@ const actions = {
       managedata.createApp(app)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'App added'
+          });
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -399,10 +409,16 @@ const actions = {
       managedata.updateApp(app)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'App updated'
+          })
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -412,10 +428,16 @@ const actions = {
       managedata.deleteApp(app)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'App deleted'
+          })
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -444,10 +466,16 @@ const actions = {
       managedata.createRole(role)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'Role added'
+          })
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          resolve();
         })
     })
   },
@@ -457,10 +485,16 @@ const actions = {
       managedata.updateRole(role)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'Role updated'
+          });
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -470,10 +504,16 @@ const actions = {
       managedata.deleteRole(role)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'Role deleted'
+          });
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -502,10 +542,16 @@ const actions = {
       managedata.createOrganization(organization)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'Organization added'
+          });
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -515,10 +561,16 @@ const actions = {
       managedata.updateOrganization(organization)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'Organization updated'
+          });
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -528,10 +580,16 @@ const actions = {
       managedata.deleteOrganization(organization)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'Organization deleted'
+          });
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -560,10 +618,16 @@ const actions = {
       managedata.createOrganization(organization)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'Organization assignment added'
+          });
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -573,10 +637,16 @@ const actions = {
       managedata.updateOrganization(organization)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'Organization assignment updated'
+          });
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -586,10 +656,16 @@ const actions = {
       managedata.deleteOrganization(organization)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'Organization assignment deleted'
+          });
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -618,10 +694,16 @@ const actions = {
       managedata.createWBAlgorithmUser(WBAlgorithmUser)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'API user added'
+          });
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -631,10 +713,16 @@ const actions = {
       managedata.updateWBAlgorithmUser(WBAlgorithmUser)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'API user updated'
+          });
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -644,10 +732,16 @@ const actions = {
       managedata.deleteWBAlgorithmUser(WBAlgorithmUsers)
         .then(() => {
           commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'API user deleted'
+          });
+          resolve();
         })
         .catch(err => {
           console.log(err);
-          commit(FINISH_REQUEST)
+          commit(FINISH_REQUEST);
+          reject();
         })
     })
   },
@@ -702,6 +796,7 @@ const mutations = {
     state.message = null
   },
   [SET_MESSAGE](state, payload) {
+    this.commit(CLEAR_MESSAGE);
     state.message = payload.message;
   },
   [SET_ACTIVE_LINK](state, payload) {

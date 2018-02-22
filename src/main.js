@@ -25,9 +25,9 @@ Vue.use(Vuelidate);
 
 Vue.material.registerTheme({
   default: {
-    primary: 'amber',
-    accent: 'amber',
-    warn: 'amber',
+    primary: 'blue',
+    accent: 'blue',
+    warn: 'blue',
     background: 'white'
   }
 });
@@ -51,9 +51,9 @@ const router = new VueRouter({ routes });
 router.beforeEach((to, from, next) => {
   next();
   const token = store.state.WBToken || localStorage.getItem('WBToken');
-  if ((!token || token === '') && to.path !== '/login' && to.path !== '/passwordchange' && to.path !== '/externallogin') {
+  if ((!token || token === '') && to.path !== '/login' && to.path !== '/passwordchange' && to.path !== '/externallogin' && to.path !== '/activate') {
     next('/login');
-  } else if ((token && token !== '') && to.path === '/login' && to.path !== '/passwordchange' && to.path !== '/externallogin') {
+  } else if ((token && token !== '') && to.path === '/login' && to.path !== '/passwordchange' && to.path !== '/externallogin' && to.path !== '/activate') {
     next('/portal');
   } else {
     next();

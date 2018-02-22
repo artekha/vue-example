@@ -8,7 +8,7 @@
       ></md-progress>
     </div>
     <wb-nav
-      v-if="isLoggedIn && ($route.path !== '/externallogin' && $route.path !== '/passwordchange')"
+      v-if="isLoggedIn && ($route.path !== '/externallogin')"
       :vuexUsing="true"
       :navbarItems="navbarItems"
       :profileMenuItems="profileMenuItems"
@@ -72,7 +72,7 @@ export default {
 
 body {
   font-size: 16px;
-  font-family: 'WidgetBrain';
+  font-family: 'Helvetica';
 }
 #app nav.navbar {
   border-bottom: 1px solid #ccc !important;
@@ -80,6 +80,10 @@ body {
   display: flex;
   align-items: center;
   height: 80px;
+}
+
+#app nav.navbar .nav {
+  font-family: 'PT Sans' !important;
 }
 
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {

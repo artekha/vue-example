@@ -48,6 +48,22 @@ export default {
     const url = `${urlBase}/api/WBUsers/validateNewPassword`;
     return utils.get(url, [{"key": "password", "value": password}]);
   },
+  validateUsername(email, username) {
+    const url = `${urlBase}/api/WBUsers/validateNewUsername`;
+    return utils.get(url, [{"key": "email", "value": email}, {"key": "username", "value": username}]);
+  },
+  checkActivateKeyEmail(email, key) {
+    const url = `${urlBase}/api/WBUsers/validateParameters`;
+    return utils.get(url, [{"key": "key", "value": key}, {"key": "email", "value": email}]);
+  },
+  getDescriptionValues(email, key) {
+    const url = `${urlBase}/api/WBUsers/userDetails`;
+    return utils.get(url, [{"key": "key", "value": key}, {"key": "email", "value": email}]);
+  },
+  activateUser(newUser) {
+    const url = `${urlBase}/api/WBUsers/activate`;
+    return utils.post(url, [], newUser);
+  },
   getUser(id) {
     const url = `${loginUrl}/api/WBUsers/${id}`;
     return utils.get(url, [{"key": "filter[include]", "value": "appAssignments"}]);
