@@ -84,7 +84,10 @@ export default {
     getWBAlgorithmUsers() {
       this.$store.dispatch('getWBAlgorithmUsers')
         .then(() => {
-          this.tableProps.dataext = JSON.parse(JSON.stringify(this.WBAlgorithmUsers));
+          this.tableProps.dataext = [];
+          this.$nextTick(() => {
+            this.tableProps.dataext = JSON.parse(JSON.stringify(this.WBAlgorithmUsers));
+          });
         });
     },
     openDialog(row) {

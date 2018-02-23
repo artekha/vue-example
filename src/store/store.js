@@ -30,6 +30,8 @@ const SET_ROLES = 'SET_ROLES';
 const SET_ORGANIZATIONS = 'SET_ORGANIZATIONS';
 const SET_ORGANIZATION_ASSIGNMENT = 'SET_ORGANIZATION_ASSIGNMENT';
 const SET_WB_ALGORITHM_USERS = 'SET_WB_ALGORITHM_USERS';
+const SET_WB_ALGORITHM_USER_APP_ASSIGNMENTS = 'SET_WB_ALGORITHM_USER_APP_ASSIGNMENTS';
+const SET_WB_ALGORITHM_USER_ORGANIZATION_ASSIGNMENTS = 'SET_WB_ALGORITHM_USER_ORGANIZATION_ASSIGNMENTS';
 
 const strict = process.env.NODE_ENV !== 'production';
 
@@ -57,6 +59,8 @@ const getters = {
   organizations: state => state.organizations,
   organizationAssignments: state => state.organizationAssignments,
   WBAlgorithmUsers: state => state.WBAlgorithmUsers,
+  WBAlgorithmUserAppAssignments: state => state.WBAlgorithmUserAppAssignments,
+  WBAlgorithmUserOrganizationAssignments: state => state.WBAlgorithmUserOrganizationAssignments,
 }
 
 const actions = {
@@ -612,10 +616,10 @@ const actions = {
         })
     });
   },
-  createOrganizationAssignment({ commit }, organization) {
+  createOrganizationAssignment({ commit }, organizationAssignment) {
     commit(START_REQUEST);
     return new Promise((resolve, reject) => {
-      managedata.createOrganization(organization)
+      managedata.createOrganizationAssignment(organizationAssignment)
         .then(() => {
           commit(FINISH_REQUEST);
           commit({
@@ -631,10 +635,10 @@ const actions = {
         })
     })
   },
-  updateOrganizationAssignment({ commit }, organization) {
+  updateOrganizationAssignment({ commit }, organizationAssignment) {
     commit(START_REQUEST);
     return new Promise((resolve, reject) => {
-      managedata.updateOrganization(organization)
+      managedata.updateOrganizationAssignment(organizationAssignment)
         .then(() => {
           commit(FINISH_REQUEST);
           commit({
@@ -650,10 +654,10 @@ const actions = {
         })
     })
   },
-  deleteOrganizationAssignment({ commit }, organization) {
+  deleteOrganizationAssignment({ commit }, organizationAssignment) {
     commit(START_REQUEST);
     return new Promise((resolve, reject) => {
-      managedata.deleteOrganization(organization)
+      managedata.deleteOrganizationAssignment(organizationAssignment)
         .then(() => {
           commit(FINISH_REQUEST);
           commit({
@@ -726,15 +730,167 @@ const actions = {
         })
     })
   },
-  deleteWBAlgorithmUser({ commit }, WBAlgorithmUsers) {
+  deleteWBAlgorithmUser({ commit }, WBAlgorithmUser) {
     commit(START_REQUEST);
     return new Promise((resolve, reject) => {
-      managedata.deleteWBAlgorithmUser(WBAlgorithmUsers)
+      managedata.deleteWBAlgorithmUser(WBAlgorithmUser)
         .then(() => {
           commit(FINISH_REQUEST);
           commit({
             type: SET_MESSAGE,
             message: 'API user deleted'
+          });
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    })
+  },
+  getWBAlgorithmUserAppAssignments({ commit }) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.getWBAlgorithmUserAppAssignments()
+        .then(res => {
+          commit({
+            type: SET_WB_ALGORITHM_USER_APP_ASSIGNMENTS,
+            WBAlgorithmUserAppAssignments: res.body
+          });
+          commit(FINISH_REQUEST);
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    });
+  },
+  createWBAlgorithmUserAppAssignment({ commit }, WBAlgorithmUserAppAssignment) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.createWBAlgorithmUserAppAssignment(WBAlgorithmUserAppAssignment)
+        .then(() => {
+          commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'API user app assignment added'
+          });
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    })
+  },
+  updateWBAlgorithmUserAppAssignment({ commit }, WBAlgorithmUserAppAssignment) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.updateWBAlgorithmUserAppAssignment(WBAlgorithmUserAppAssignment)
+        .then(() => {
+          commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'API user app assignment updated'
+          });
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    })
+  },
+  deleteWBAlgorithmUserAppAssignment({ commit }, WBAlgorithmUserAppAssignment) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.deleteWBAlgorithmUserAppAssignment(WBAlgorithmUserAppAssignment)
+        .then(() => {
+          commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'API user app assignment deleted'
+          });
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    })
+  },
+  getWBAlgorithmUserOrganizationAssignments({ commit }) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.getWBAlgorithmUserOrganizationAssignments()
+        .then(res => {
+          commit({
+            type: SET_WB_ALGORITHM_USER_ORGANIZATION_ASSIGNMENTS,
+            WBAlgorithmUserOrganizationAssignments: res.body
+          });
+          commit(FINISH_REQUEST);
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    });
+  },
+  createWBAlgorithmUserOrganizationAssignment({ commit }, WBAlgorithmUserOrganizationAssignment) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.createWBAlgorithmUserOrganizationAssignment(WBAlgorithmUserOrganizationAssignment)
+        .then(() => {
+          commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'API user organization assignment added'
+          });
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    })
+  },
+  updateWBAlgorithmUserOrganizationAssignment({ commit }, WBAlgorithmUserOrganizationAssignment) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.updateWBAlgorithmUserOrganizationAssignment(WBAlgorithmUserOrganizationAssignment)
+        .then(() => {
+          commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'API user organization assignment updated'
+          });
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+          commit(FINISH_REQUEST);
+          reject();
+        })
+    })
+  },
+  deleteWBAlgorithmUserOrganizationAssignment({ commit }, WBAlgorithmUserOrganizationAssignment) {
+    commit(START_REQUEST);
+    return new Promise((resolve, reject) => {
+      managedata.deleteWBAlgorithmUserOrganizationAssignment(WBAlgorithmUserOrganizationAssignment)
+        .then(() => {
+          commit(FINISH_REQUEST);
+          commit({
+            type: SET_MESSAGE,
+            message: 'API user organization assignment deleted'
           });
           resolve();
         })
@@ -851,6 +1007,12 @@ const mutations = {
   [SET_WB_ALGORITHM_USERS](state, payload) {
     state.WBAlgorithmUsers = payload.WBAlgorithmUsers;
   },
+  [SET_WB_ALGORITHM_USER_APP_ASSIGNMENTS](state, payload) {
+    state.WBAlgorithmUserAppAssignments = payload.WBAlgorithmUserAppAssignments;
+  },
+  [SET_WB_ALGORITHM_USER_ORGANIZATION_ASSIGNMENTS](state, payload) {
+    state.WBAlgorithmUserOrganizationAssignments = payload.WBAlgorithmUserOrganizationAssignments;
+  },
 };
 
 const state = {
@@ -875,6 +1037,8 @@ const state = {
   organizations: null,
   organizationAssignments: null,
   WBAlgorithmUsers: null,
+  WBAlgorithmUserAppAssignments: null,
+  WBAlgorithmUserOrganizationAssignments: null,
   verticals: [
     { name:"Logistics",show:true },
     { name:"Equipment",show:true },

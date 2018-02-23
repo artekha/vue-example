@@ -191,4 +191,53 @@ export default {
     const url = `${apiUrl}/api/wbAlgorithmUsers`;
     return utils.delete(url, user.id);
   },
+  getWBAlgorithmUsers() {
+    let params = [];
+    const url = `${urlBase}/api/wbAlgorithmUsers`;
+    return utils.get(url, []);
+  },
+  createWBAlgorithmUser(user) {
+    const url = `${apiUrl}/api/wbAlgorithmUsers`;
+    return utils.post(url, [], user);
+  },
+  updateWBAlgorithmUser(user) {
+    const url = `${apiUrl}/api/wbAlgorithmUsers`;
+    return utils.put(url, [], user);
+  },
+  deleteWBAlgorithmUser(user) {
+    const url = `${apiUrl}/api/wbAlgorithmUsers`;
+    return utils.delete(url, user.id);
+  },
+  getWBAlgorithmUserAppAssignments() {
+    const url = `${urlBase}/api/wbalgorithmuserappassignments`;
+    return utils.get(url, [{"key": "filter", "value": "%7B%22include%22%3A[%22wbAlgorithmUser%22,%22app%22]%7D"}])
+  },
+  createWBAlgorithmUserAppAssignment(userAppAssignment) {
+    const url = `${apiUrl}/api/wbalgorithmuserappassignments`;
+    return utils.post(url, [], userAppAssignment);
+  },
+  updateWBAlgorithmUserAppAssignment(userAppAssignment) {
+    const url = `${apiUrl}/api/wbalgorithmuserappassignments`;
+    return utils.put(url, [], userAppAssignment);
+  },
+  deleteWBAlgorithmUserAppAssignment(userAppAssignment) {
+    const url = `${apiUrl}/api/wbalgorithmuserappassignments`;
+    return utils.delete(url, userAppAssignment.id);
+  },
+  getWBAlgorithmUserOrganizationAssignments() {
+    const url = `${urlBase}/api/wbalgorithmuserorganizationassignments`;
+    return utils.get(url, [{"key": "filter", "value": "%7B%22include%22%3A[%22wbAlgorithmUser%22,%22organization%22]%7D"}])
+  },
+  createWBAlgorithmUserOrganizationAssignment(userOrganizationAssignment) {
+    const url = `${apiUrl}/api/wbalgorithmuserorganizationassignments`;
+    return utils.post(url, [], userOrganizationAssignment);
+  },
+  updateWBAlgorithmUserOrganizationAssignment(userOrganizationAssignment) {
+    const url = `${apiUrl}/api/wbalgorithmuserorganizationassignments`;
+    return utils.put(url, [], userOrganizationAssignment);
+  },
+  deleteWBAlgorithmUserOrganizationAssignment(userOrganizationAssignment) {
+    const url = `${apiUrl}/api/wbalgorithmuserorganizationassignments`;
+    return utils.delete(url, userOrganizationAssignment.id);
+  },
 }

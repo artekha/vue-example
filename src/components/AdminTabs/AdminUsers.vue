@@ -151,7 +151,10 @@ export default {
         .then(() => {
           this.$store.commit('START_REQUEST');
           const clonedUsers = JSON.parse(JSON.stringify(this.users));
-          this.tableProps.dataext = clonedUsers;
+          this.tableProps.dataext = [];
+          this.$nextTick(() => {
+            this.tableProps.dataext = clonedUsers;
+          });
           this.$store.commit('FINISH_REQUEST');
 
           this.$store.dispatch('getApps')

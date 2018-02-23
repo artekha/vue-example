@@ -95,7 +95,10 @@ export default {
     getApps() {
       this.$store.dispatch('getApps')
         .then(() => {
-          this.tableProps.dataext = JSON.parse(JSON.stringify(this.apps));
+          this.tableProps.dataext = [];
+          this.$nextTick(() => {
+            this.tableProps.dataext = JSON.parse(JSON.stringify(this.apps));
+          });
         })
     },
     openDialog(row) {

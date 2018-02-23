@@ -98,11 +98,13 @@ export default {
   methods: {
     changeUser(organizationAssignment, user) {
       organizationAssignment.user = Object.assign({}, user);
+      organizationAssignment.userId = user.id;
     },
     changeOrganization(organizationAssignment, organization) {
       organizationAssignment.organization = Object.assign({}, organization);
+      organizationAssignment.organizationId = organization.id;
     },
-    getOrganizationAssignmens() {
+    getOrganizationAssignments() {
       this.$store.dispatch('getOrganizationAssignments')
         .then(() => {
           const customOrganizationAssignments = this.organizationAssignments.map(organizationAssignment => {
@@ -119,7 +121,10 @@ export default {
             };
             return organizationAssignmentCopy;
           });
-          this.tableProps.dataext = customOrganizationAssignments;
+          this.tableProps.dataext = [];
+          this.$nextTick(() => {
+            this.tableProps.dataext = customOrganizationAssignments;
+          });
           this.$store.dispatch('getOrganizations')
             .then(() => {
               this.organizationsCopy = JSON.parse(JSON.stringify(this.organizations));
@@ -162,9 +167,9 @@ export default {
           organizationAssignmentForRequest.id = this.organizationAssignment.id;
         }
 
-        this.$store.dispatch(actionName, this.app)
+        this.$store.dispatch(actionName, organizationAssignmentForRequest)
           .then(() => {
-            this.getArganizationAssignments();
+            this.getOrganizationAssignments();
           });
       }
       this.$refs.dialog.close();
@@ -178,7 +183,7 @@ export default {
       if (isConfirmed) {
         this.$store.dispatch('deleteOrganizationAssignment', this.organizationAssignment)
           .then(() => {
-            this.getOrganizationAssignmens();
+            this.getOrganizationAssignments();
           });
       }
       this.$refs.confirmDialog.close();
@@ -186,7 +191,7 @@ export default {
   },
   mounted() {
     this.tableProps.columns = this.tableColumns;
-    this.getOrganizationAssignmens();
+    this.getOrganizationAssignments();
   }
 }
 </script>

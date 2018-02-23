@@ -79,7 +79,10 @@ export default {
     getOrganizations() {
       this.$store.dispatch('getOrganizations')
         .then(() => {
-          this.tableProps.dataext = JSON.parse(JSON.stringify(this.organizations));
+          this.tableProps.dataext = [];
+          this.$nextTick(() => {
+            this.tableProps.dataext = JSON.parse(JSON.stringify(this.organizations));
+          });
         });
     },
     openDialog(row) {

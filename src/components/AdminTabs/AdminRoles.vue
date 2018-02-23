@@ -103,9 +103,11 @@ export default {
   methods: {
     changeUser(role, user) {
       role.user = Object.assign({}, user);
+      role.userId = user.id;
     },
     changeApp(role, app) {
       role.app = Object.assign({}, app);
+      role.appId = app.id;
     },
     getRoles() {
       this.$store.dispatch('getRoles')
@@ -116,14 +118,19 @@ export default {
             const roleCopy = {
               id: role.id,
               app: role.app,
+              appId: role.appId,
               appName: appName,
               user: role.user,
+              userId: role.userId,
               userEmail: userEmail,
               role: role.role
             }
             return roleCopy;
           });
-          this.tableProps.dataext = customRoles;
+          this.tableProps.dataext = [];
+          this.$nextTick(() => {
+            this.tableProps.dataext = customRoles;
+          });
           this.$store.dispatch('getApps')
             .then(() => {
               this.appsCopy = JSON.parse(JSON.stringify(this.apps));
@@ -133,6 +140,9 @@ export default {
             .then(() => {
               this.usersCopy = JSON.parse(JSON.stringify(this.users));
             });
+        })
+        .catch(err => {
+          console.log(err);
         });
     },
     openDialog(row) {
@@ -145,8 +155,10 @@ export default {
         this.role = {
           userEmail: null,
           user: null,
+          userId: null,
           appName: null,
           app: null,
+          appId: null,
           role: null
         };
       }
@@ -157,13 +169,15 @@ export default {
         const actionName = this.isNew ? 'createRole' : 'updateRole';
         const roleForRequest = {
           app: Object.assign({}, this.role.app),
+          appId: this.role.appId,
           user: Object.assign({}, this.role.user),
+          userId: this.role.userId,
           role: this.role.role
         };
         if (this.role.id) {
           roleForRequest.id = this.role.id;
         }
-        this.$store.dispatch(actionName, this.app)
+        this.$store.dispatch(actionName, roleForRequest)
           .then(() => {
             this.getRoles();
           });
