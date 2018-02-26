@@ -933,7 +933,7 @@ const mutations = {
   },
   [LOGIN_ERROR](state, payload) {
     this.commit(CLEAR_MESSAGE);
-    state.message = payload.response.body.error.message;
+    state.message = 'Username or password not recognized';
   },
   [SET_ROUTE](state, payload) {
     state.route = payload.route;
