@@ -2,6 +2,7 @@
   <div class="admin-tab">
     <wb-datatable
       v-bind="tableProps"
+      :pagination="{size: 50}"
       @addEmit="openCreateDialog"
       @editEmit="openUpdateDialog"
       @deleteEmit="openConfirmDialog"
@@ -108,6 +109,9 @@ export default {
         hasControls: true,
         allowCreation: true,
         disableSearch: true,
+        // pagination: {
+        //   size: 50
+        // },
       },
       tableColumns: [
         {name: 'id', displayName: 'ID', visible: true, type:'number', isEditable:false},
