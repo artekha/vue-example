@@ -12,30 +12,14 @@
         <div @click="currentTab = 8" class="admin-trigger" :class="[currentTab === 8 ? 'admin-trigger_active' : '']">Api User Organization Assignments</div>
       </div>
       <div class="admin-tabs">
-        <div v-if="currentTab === 1" class="admin-tab">
-          <admin-users></admin-users>
-        </div>
-        <div v-if="currentTab === 2" class="admin-tab">
-          <admin-apps></admin-apps>
-        </div>
-        <div v-if="currentTab === 3" class="admin-tab">
-          <admin-roles></admin-roles>
-        </div>
-        <div v-if="currentTab === 4" class="admin-tab">
-          <admin-organizations></admin-organizations>
-        </div>
-        <div v-if="currentTab === 5" class="admin-tab">
-          <admin-organization-assignments></admin-organization-assignments>
-        </div>
-        <div v-if="currentTab === 6" class="admin-tab">
-          <admin-api-users></admin-api-users>
-        </div>
-        <div v-if="currentTab === 7" class="admin-tab">
-          <admin-api-user-app-assignments></admin-api-user-app-assignments>
-        </div>
-        <div v-if="currentTab === 8" class="admin-tab">
-          <admin-api-user-organization-assignments></admin-api-user-organization-assignments>
-        </div>
+        <admin-users v-if="currentTab === 1"></admin-users>
+        <admin-apps v-if="currentTab === 2"></admin-apps>
+        <admin-roles v-if="currentTab === 3"></admin-roles>
+        <admin-organizations v-if="currentTab === 4"></admin-organizations>
+        <admin-organization-assignments v-if="currentTab === 5"></admin-organization-assignments>
+        <admin-api-users v-if="currentTab === 6"></admin-api-users>
+        <admin-api-user-app-assignments v-if="currentTab === 7"></admin-api-user-app-assignments>
+        <admin-api-user-organization-assignments v-if="currentTab === 8"></admin-api-user-organization-assignments>
       </div>
     </div>
   </div>
@@ -78,11 +62,23 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
+<style>
+tbody.md-table-body {
+  height: calc(100vh - 270px) !important;
+  overflow: auto;
+}
+
+.admin-tab .md-table-card .md-table-pagination {
+  justify-content: center;
+}
+</style>
+
 <style scoped>
 .admin-triggers {
   display: flex;
   justify-content: center;
   border-bottom: 1px solid #ccc;
+  height: 40px;
 }
 
 .admin-trigger {
