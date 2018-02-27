@@ -80,6 +80,10 @@ body {
   font-size: 16px;
   font-family: 'Helvetica';
 }
+
+.md-dialog-container .md-dialog {
+  min-width: 480px;
+}
 #app nav.navbar {
   border-bottom: 1px solid #ccc !important;
   background: #0A2052;
