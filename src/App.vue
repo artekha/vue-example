@@ -70,6 +70,12 @@ export default {
   outline: none;
 }
 
+@font-face {
+  font-family: 'Bebas';
+  src: url('/static/bebas/BebasNeue Bold.otf');
+  font-weight: bold;
+}
+
 body {
   font-size: 16px;
   font-family: 'Helvetica';
@@ -83,7 +89,7 @@ body {
 }
 
 #app nav.navbar .nav {
-  font-family: 'PT Sans' !important;
+  font-family: 'Bebas' !important;
 }
 
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
@@ -98,7 +104,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 
 #app nav.navbar a.nav-item.nav-link {
   line-height: 86px;
-  font-size: .9rem;
+  font-size: 1.5rem;
 }
 
 #app nav.navbar .navbar-brand-image {
