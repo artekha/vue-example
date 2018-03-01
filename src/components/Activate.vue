@@ -62,6 +62,7 @@ export default {
               type: 'SET_MESSAGE',
               message: 'Email or activation key not correct'
             });
+            
             setTimeout(() => {
               this.$store.commit({
                 type: 'CHANGE_ROUTE',
