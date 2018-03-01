@@ -8,7 +8,7 @@
         <form @submit.prevent="closeDialog('forgotPassword', true)">
           <md-input-container>
             <label>Email</label>
-            <md-input v-model="forgottenEmail"></md-input>
+            <md-input type="email" name="email" v-model="forgottenEmail"></md-input>
           </md-input-container>
         </form>
       </md-dialog-content>
@@ -26,11 +26,11 @@
         <form @submit.prevent="login" class="auth-form">
           <md-input-container>
             <label>Email</label>
-            <md-input v-model="user.email"></md-input>
+            <md-input name="email" type="email" v-model="user.email"></md-input>
           </md-input-container>
           <md-input-container md-has-password>
             <label>Password</label>
-            <md-input type="password" v-model="user.password"></md-input>
+            <md-input name="password" type="password" v-model="user.password"></md-input>
           </md-input-container>
           <div class="auth-helpers">
             <div class="auth-helpers-part">

@@ -5,7 +5,6 @@ import config from './config';
 
 const apiUrl = config.apiUrl[config.remoteAPI];
 const loginUrl = config.apiUrl[config.loginAPI];
-const urlBase = config.urlBase;
 
 export default {
   login(user) {
@@ -21,7 +20,7 @@ export default {
     return utils.post(url, [],creds);
   },
   changePassword(password, token) {
-    let urlString = `${urlBase}/api/WBUsers/passwordReset`;
+    let urlString = `${apiUrl}/api/WBUsers/passwordReset`;
     let params = [];
     params.push({key:'access_token', value:token});
 
@@ -45,23 +44,23 @@ export default {
     })
   },
   validatePassword(password) {
-    const url = `${urlBase}/api/WBUsers/validateNewPassword`;
+    const url = `${apiUrl}/api/WBUsers/validateNewPassword`;
     return utils.get(url, [{"key": "password", "value": password}]);
   },
   validateUsername(email, username) {
-    const url = `${urlBase}/api/WBUsers/validateNewUsername`;
+    const url = `${apiUrl}/api/WBUsers/validateNewUsername`;
     return utils.get(url, [{"key": "email", "value": email}, {"key": "username", "value": username}]);
   },
   checkActivateKeyEmail(email, key) {
-    const url = `${urlBase}/api/WBUsers/validateParameters`;
+    const url = `${apiUrl}/api/WBUsers/validateParameters`;
     return utils.get(url, [{"key": "key", "value": key}, {"key": "email", "value": email}]);
   },
   getDescriptionValues(email, key) {
-    const url = `${urlBase}/api/WBUsers/userDetails`;
+    const url = `${apiUrl}/api/WBUsers/userDetails`;
     return utils.get(url, [{"key": "key", "value": key}, {"key": "email", "value": email}]);
   },
   activateUser(newUser) {
-    const url = `${urlBase}/api/WBUsers/activate`;
+    const url = `${apiUrl}/api/WBUsers/activate`;
     return utils.post(url, [], newUser);
   },
   getUser(id) {
@@ -176,7 +175,7 @@ export default {
   },
   getWBAlgorithmUsers() {
     let params = [];
-    const url = `${urlBase}/api/wbAlgorithmUsers`;
+    const url = `${apiUrl}/api/wbAlgorithmUsers`;
     return utils.get(url, []);
   },
   createWBAlgorithmUser(user) {
@@ -193,7 +192,7 @@ export default {
   },
   getWBAlgorithmUsers() {
     let params = [];
-    const url = `${urlBase}/api/wbAlgorithmUsers`;
+    const url = `${apiUrl}/api/wbAlgorithmUsers`;
     return utils.get(url, []);
   },
   createWBAlgorithmUser(user) {
@@ -209,7 +208,7 @@ export default {
     return utils.delete(url, user.id);
   },
   getWBAlgorithmUserAppAssignments() {
-    const url = `${urlBase}/api/wbalgorithmuserappassignments`;
+    const url = `${apiUrl}/api/wbalgorithmuserappassignments`;
     return utils.get(url, [{"key": "filter", "value": "%7B%22include%22%3A[%22wbAlgorithmUser%22,%22app%22]%7D"}])
   },
   createWBAlgorithmUserAppAssignment(userAppAssignment) {
@@ -225,7 +224,7 @@ export default {
     return utils.delete(url, userAppAssignment.id);
   },
   getWBAlgorithmUserOrganizationAssignments() {
-    const url = `${urlBase}/api/wbalgorithmuserorganizationassignments`;
+    const url = `${apiUrl}/api/wbalgorithmuserorganizationassignments`;
     return utils.get(url, [{"key": "filter", "value": "%7B%22include%22%3A[%22wbAlgorithmUser%22,%22organization%22]%7D"}])
   },
   createWBAlgorithmUserOrganizationAssignment(userOrganizationAssignment) {
