@@ -68,11 +68,11 @@ export default {
     return utils.get(url, [{"key": "filter[include]", "value": "appAssignments"}]);
   },
   getApps() {
-    const url = `${apiUrl}/api/wbapps`;
+    const url = `${apiUrl}/api/Authorizeds/getApps`;
     return utils.get(url, []);
   },
   getAssignments() {
-    const url = `${apiUrl}/api/WBUsers/assignments`;
+    const url = `${apiUrl}/api/Authorizeds/assignments`;
     return utils.get(url, []);
   },
   getMicroservices() {
