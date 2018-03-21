@@ -25,7 +25,7 @@
         @click="forward(app)"
       >
         <div class="portal-app__image">
-          <img :src="'/static/' + app.image" alt="">
+          <img :src="getImageSrc(app.image)" alt="">
           <div class="portal-app__image-placeholder">WB</div>
         </div>
         <div class="portal-app__name">{{app.Name}}</div>
@@ -83,6 +83,15 @@ export default {
         const userId = this.userId || localStorage.getItem('userId');
         window.location.href = url+"?wbtoken="+token+'&user='+userId;
       }
+    },
+    getImageSrc(src) {
+      let result = '';
+      if(src.indexOf('http') !== -1){
+        result = src;
+      } else {
+        result = '/static/' + src;
+      }
+      return result;
     }
   },
   mounted() {
