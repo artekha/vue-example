@@ -1,0 +1,17 @@
+{
+  "name": "get-connected-ui",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "lint": "eslint .",
+    "start": "node .",
+    "posttest": "npm run lint && nsp check"
+  },
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "express": "^4.13.3"
+  },
+  "engines":{
+    "node":"4.2.2"
+  }
+}
