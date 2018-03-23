@@ -1015,6 +1015,7 @@ const mutations = {
   },
 };
 
+
 const state = {
   isLoggedIn: !!localStorage.getItem('WBToken'),
   pending: false,
