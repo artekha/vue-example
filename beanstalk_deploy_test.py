@@ -98,7 +98,7 @@ def deploy_new_version():
     try:
         response = client.update_environment(
             ApplicationName=os.getenv('APPLICATION_NAME'),
-            EnvironmentName=os.getenv('APPLICATION_ENVIRONMENT'),
+            EnvironmentName=os.getenv('APPLICATION_ENVIRONMENT_TEST'),
             VersionLabel=VERSION_LABEL,
         )
     except ClientError as err:
