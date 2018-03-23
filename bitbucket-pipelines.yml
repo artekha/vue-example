@@ -13,10 +13,9 @@ pipelines:
               - npm install # install vue and all relevant components
               - npm run build -- 2
               - cd dist
-              - zip -r /tmp/artifact.zip * # package up the application for deployment
+              - zip -r /tmp /artifact.zip * # package up the application for deployment
               - cd ..
               - python beanstalk_deploy_test.py # run the deployment script
-  branches:
     master:
         - step:
             script: # Modify the commands below to build your repository.
@@ -28,6 +27,6 @@ pipelines:
               - npm install # install vue and all relevant components
               - npm run build -- 2
               - cd dist
-              - zip -r /tmp/artifact.zip * # package up the application for deployment
+              - zip -r /tmp /artifact.zip * # package up the application for deployment
               - cd ..
               - python beanstalk_deploy.py # run the deployment script
